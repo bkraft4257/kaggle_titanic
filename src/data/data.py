@@ -4,14 +4,18 @@ from pathlib import Path
 
 
 class ExtractData:
-    def __init__(self, filename: Union[str, Path]) -> None:
-        """Extract Training Data from file or Path
+    def __init__(self, filename: Union[str, Path], drop_columns = None) -> None:
+        # """Extract Training Data from file or Path
         
-        Arguments:
-            filename {[str]} -- Filename of CSV data file containing data. 
-        """
+        # Arguments:
+        #     filename {[str]} -- Filename of CSV data file containing data. 
+        #     drop_columns -- Columns in dataframe that should be dropped. 
+        # """
+        if drop_columns is None:
+            drop_columns = ['age', 'cabin', 'name', 'ticket']
 
         self.filename = filename
+        self.drop_columns = drop_columns
         self.all_label_columns = ['survived']
         self.all_feature_columns = ['pclass', 'name', 'sex', 'age', 'sibsp', 'parch', 'ticket',
                                     'fare', 'cabin', 'embarked']
@@ -33,17 +37,10 @@ class ExtractData:
 
         self.Xy_raw = Xy_raw.set_index('passengerid')
 
-    def clean(self, drop_columns=None):
+    def clean(self,):
         """Clean data to remove missing data and "unnecessary" features.
         
         Arguments:
             in_raw_df {pd.DataFrame} -- Dataframe containing all columns and rows Kaggle Titanic Training Data set
-        
-        Keyword Arguments:
-            drop_columns {[type]} -- [description] (default: {None})
         """
-
-        if drop_columns is None:
-            drop_columns = ['age', 'cabin', 'name', 'ticket']
-
-        self.Xy = self.Xy_raw.drop(drop_columns, axis=1).dropna(axis=0, how='any')
+        self.Xy = self.Xy_raw.drop(self.drop_columns, axis=1).dropna(axis=0, how='any')

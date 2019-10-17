@@ -63,7 +63,18 @@ These are copied directly from `Kaggle Titanic Data <https://www.kaggle.com/c/ti
 Model: Logistic Regression
 --------------------------
 
-Simple model using Logistic Regression with the cleanest data. Achieved 80% accuracy.
+Simple model using Logistic Regression with the cleanest data. Achieved 80.3% accuracy.
 
 `Model: Logistic Regression <_notebooks/model_logreg__2019-10-17.html>`_
+
+
+.. _model-logreg_with_age:
+
+Model: Logistic Regression including age in the features
+--------------------------------------------------------
+
+Simple model using Logistic Regression including age in the features. 
+There as insignificant change in the accuracy compared to the first model (80.4%).
+
+`Model: Logistic Regression with Age <_notebooks/model__logreg_with_age__2019-10-17.html>`_
 

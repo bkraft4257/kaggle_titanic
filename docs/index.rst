@@ -14,7 +14,7 @@ Contents:
    getting-started
    commands
 
-   abstract
+   executive_summary
    introduction
    methods
 
@@ -30,7 +30,8 @@ Notebooks
 
    * `Exploratory Data Analysis <_notebooks/eda__2019-10-14.html>`_
    * `Model: Logistic Regression <_notebooks/model__logreg__2019-10-17.html>`_
-                                             
+   * `Model: Logistic Regression with Age <_notebooks/model__logreg_with_age__2019-10-17.html>`_
+
 
 Indices and tables
 ==================
