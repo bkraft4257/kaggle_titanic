@@ -151,3 +151,16 @@ doctest:
 	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
+
+gecopy:
+	@echo
+	@echo "Copying Great Expectations Profiler."
+	rsync -avzu --progress -h ../great_expectations/uncommitted/data_docs/local_site _great_expectations/
+	rsync -avzu --progress -h _great_expectations/ _build/html/_great_expectations/
+	@echo
+
+nbcopy:
+	@echo
+	@echo "Copying HTML Notebooks to _build/html/_notebooks."
+	rsync -avzu --progress -h _notebooks/ _build/html/_notebooks
+	@echo

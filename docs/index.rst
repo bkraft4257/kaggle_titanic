@@ -13,6 +13,20 @@ Contents:
 
    getting-started
    commands
+   introduction
+   methods
+
+   data_schema
+   log
+
+
+Great Expectations:
+
+   `Great Expectations Profiler <_great_expectations/local_site/index.html>`_
+
+Notebooks
+
+   `Exploratory Data Analysis <_notebooks/exploratory_data_analysis__2019-10-14.html>`_
 
 
 
