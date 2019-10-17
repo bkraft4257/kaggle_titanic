@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-kaggle_titanic documentation!
-==============================================
+Kaggle Titanic Project
+======================
 
 Contents:
 
@@ -13,22 +13,24 @@ Contents:
 
    getting-started
    commands
+
+   abstract
    introduction
    methods
 
-   data_schema
    log
 
 
-Great Expectations:
+Profiles:
 
-   `Great Expectations Profiler <_great_expectations/local_site/index.html>`_
+   * `Great Expectations Profile <_great_expectations/local_site/index.html>`_
+   * `Pandas Profile <_profiles/pandas_profiling.html>`_
 
 Notebooks
 
-   `Exploratory Data Analysis <_notebooks/exploratory_data_analysis__2019-10-14.html>`_
-
-
+   * `Exploratory Data Analysis <_notebooks/eda__2019-10-14.html>`_
+   * `Model: Logistic Regression <_notebooks/model__logreg__2019-10-17.html>`_
+                                             
 
 Indices and tables
 ==================
