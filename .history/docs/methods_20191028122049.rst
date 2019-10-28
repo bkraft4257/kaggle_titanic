@@ -1,0 +1,142 @@
+Methods
+=======
+
+Data
+----
+
+Data can be downloaded from <https://www.kaggle.com/c/titanic/data>_
+
+This data set contains two CSV files: train.csv and test.csv.  When
+we train our model we will split the test data into two groups. By
+convention the split data will be called train and test. To avoid
+confusion with the test.csv data, the test csv data will be renamed
+and stored as holdout.csv.
+
+In short, the holdout.csv data is identical to the test.csv data
+from the Kaggle Titanic data set.
+
+* The train.csv file contains 891 passengers.
+* The holdout.csv file contains 418 passengers.
+
+These two data sets account for 1309 of the passengers aboard the
+Titanic.
+
+
+.. table::
+
+    ============ ============================================ ============================================ ========
+    Variable     Definition                                   Key                                              Type
+    ============ ============================================ ============================================ ========
+    survival     Survival                                     0=No, 1=Yes                                  cat/int
+    pclass       Ticket class                                 1=1st, 2=2nd, 3=3rd                          cat
+    sex          Sex                                          Male/Female                                  cat/text
+    Age	         Age in year                                                                               float
+    sibsp	     N of siblings spouses aboard the Titanic                                                  int
+    parch	     N of parents children aboard the Titanic                                                  int
+    ticket	     Ticket number                                                                             cat/text
+    fare	     Passenger fare                                                                            float
+    cabin	     Cabin number                                                                              text
+    embarked     Port of Embarkation	                      C=Cherbourg, Q=Queenstown, S=Southampton     cat/text
+    ============ ============================================ ============================================ ========
+
+Variable Notes
+--------------
+
+These are copied directly from `Kaggle Titanic Data <https://www.kaggle.com/c/titanic/data>`_
+
+.. |br| raw:: html
+
+    <br />
+
+**pclass**:
+    A proxy for socio-economic status (SES)
+        1st = Upper  |br|
+        2nd = Middle |br|
+        3rd = Lower  |br|
+
+**age**:
+    Age is fractional if less than 1. If the age is estimated,
+    is it in the form of xx.5
+
+**sibsp**:
+    The dataset defines family relations in this way...  |br|
+        Sibling = brother, sister, stepbrother, stepsister  |br|
+        Spouse = husband, wife (mistresses and fiancés were ignored)
+
+**parch**:
+    The dataset defines family relations in this way... |br|
+        Parent = mother, father  |br|
+        Child = daughter, son, stepdaughter, stepson |br|
+        Some children travelled only with a nanny, therefore parch=0 for them.
+
+**ticket**
+    ticket has a high cardinality (681 distinct values).  There
+    may be useful information in this feature, however, it will
+    be ignored in the initial modality.
+
+.. _model-logreg:
+
+Model: Logistic Regression
+--------------------------
+
+Simple model using Logistic Regression with the cleanest data. Achieved 80.3% accuracy.
+
+`Model: Logistic Regression <_notebooks/model_logreg__2019-10-17.html>`_
+
+
+.. _model-logreg_with_age:
+
+Model: Logistic Regression with age 
+--------------------------------------------------------
+
+Simple model using Logistic Regression including age in the features.
+There as insignificant change in the accuracy compared to the first model (80.4%).
+
+`Model: Logistic Regression with Age <_notebooks/model__logreg_with_age__2019-10-17.html>`_
+
+
+.. _model-scaled_logreg_with_age:
+
+Model: Scaled Logistic Regression with age
+--------------------------------------------------------
+
+Simple model using Logistic Regression including age in the features.
+There as insignificant change in the accuracy compared to the first model (81.118%).
+
+`Model: Logistic Regression with Age <_notebooks/model__logreg_with_age__2019-10-17.html>`_
+
+... model:
+    Index(['age', 'fare', 'family_size', 'is_child', 'is_travelling_alone',
+           'sex_male', 'embarked_Q', 'embarked_S', 'title_Miss', 'title_Mr',
+           'title_Mrs', 'age_bin_(10.0, 20.0]', 'age_bin_(20.0, 30.0]',
+           'age_bin_(30.0, 40.0]', 'age_bin_(40.0, 50.0]', 'age_bin_(50.0, 60.0]',
+       'age_bin_(60.0, inf]'],
+      dtype='object')
+
+    LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+                       intercept_scaling=1, l1_ratio=None, max_iter=100,
+                       multi_class='warn', n_jobs=None, penalty='l2',
+                       random_state=None, solver='warn', tol=0.0001, verbose=0,
+                       warm_start=False)
+
+Kaggle Results
+--------------
+
+I was shocked the first time I looked at the Kaggle Titanic Public
+Leader Board. On October 18, 2019 there were 71 entries with a
+perfect accuracy score. My first submission I received a 0.77511.
+
+After my shock had worn off and I realized that these perfect
+scores were impossible.  I wanted to know what was considered a
+good accuracy score for the Titanic Kaggle data set.  There
+was an excellent analysis done by `ShapedSundew9 <https://www.kaggle.com/c/titanic/discussion/26284>`_
+
+ShapedSundew9 concluded that a score in the range 83-84% should
+be considered good. It looks like I have some work to do. I
+reproduced the plots of ShapedSundew9 so I could track my own progress.
+
+.. |public_leader_board| image:: _images/public_leader_board.png
+  :width: 400
+  :alt: Alternative text
+
+|public_leader_board|

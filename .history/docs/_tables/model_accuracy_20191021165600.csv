@@ -1,0 +1,2 @@
+model,accuracy, recall, precision, f1, description
+gender_model,.7,.7,.7,.7, My first model

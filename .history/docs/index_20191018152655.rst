@@ -1,0 +1,41 @@
+.. kaggle_titanic documentation master file, created by
+   sphinx-quickstart.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Kaggle Titanic Project
+======================
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   getting-started
+   commands
+   executive_summary
+   kaggle_results
+   introduction
+   methods
+
+   log
+
+
+Profiles:
+
+   * `Great Expectations Profile <_great_expectations/local_site/index.html>`_
+   * `Pandas Profile <_profiles/pandas_profiling.html>`_
+
+Notebooks
+
+   * `Exploratory Data Analysis <_notebooks/eda__2019-10-14.html>`_
+   * `Model: Logistic Regression <_notebooks/model__logreg__2019-10-17.html>`_
+   * `Model: Logistic Regression with Age <_notebooks/model__logreg_with_age__2019-10-17.html>`_
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

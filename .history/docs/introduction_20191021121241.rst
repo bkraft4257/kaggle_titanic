@@ -1,0 +1,18 @@
+Introduction
+============
+
+`Titanic: Machine Learning from Disaster <https://www.kaggle.com/c/titanic/overview>`_
+
+
+Background
+----------
+
+* 2224 passengers and crew on the RMS Titanic
+* 1,502 perished on April 15, 1912
+* 722 passengers and crew would survive the disaster.
+
+
+What is interesting about these numbers from the Kaggle Titanic web
+site is that are other statistics are reported from other web pages.
+demonstrating that nothing is ever simple and you should to validate 
+every source / fc
