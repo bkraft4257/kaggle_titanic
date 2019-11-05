@@ -44,6 +44,9 @@ Oct 17, 2019 at 2:30:03 PM
 **Recommendation**
     Try Normalizing the features before fitting.
 
+
+.. _log-current-status:
+
 Oct 28, 2019 at 9:35:23 AM
 --------------------------
 
@@ -55,6 +58,29 @@ Oct 28, 2019 at 9:35:23 AM
     * Default Spinx theme should be replaced with Read The Docs theme.
     https://sphinx-rtd-theme.readthedocs.io/en/stable/ 
 
+**Situation**
+    I am able to achieve a 0.8384 accuracy score on the test data set. However,
+    when I calculate the accuracy on the Kaggle Holdout data my score drops to
+    0.79425.  WHY?
 
-Current Status
---------------
+**Background**
+    The Gender Only model produces a Holdout Accuracy score of 0.76555. The
+    logreg_model_3 uses only 5 parameters ('title_Mr', 'title_Mrs',
+    'family_size', 'is_child', 'pclass').  Reducing the number of features
+    allowed the Kaggle Holdout Score to increase.
+
+**Assessment**
+    At this point, I believe we are reaching the point of diminishing returns
+    with Logistic regression. From two perspectives,
+
+    #. I don't believe the Kaggle Holdout accuracy score will increase
+    that much. Others have reported higher accuracy scores but for
+    they are reporting cross validation accuracy scores.
+
+    #. I am limiting what I can learn by not using other models.
+
+**Recommendation**
+    I recommend exploring the use of Decision Trees for the Kaggle competition.
+
+
+

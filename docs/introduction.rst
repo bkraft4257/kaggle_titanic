@@ -20,4 +20,6 @@ From USA Today article
 What is interesting about these numbers from the Kaggle Titanic web
 site is that are other statistics are reported from other web pages.
 demonstrating that nothing is ever simple and you should validate
-every source / fact that you read. https://www.usatoday.com/picture-gallery/travel/cruises/2019/04/12/57-fascinating-facts-titanic/3448724002/ 
+every source / fact that you read.
+
+`USA Today <https://www.usatoday.com/picture-gallery/travel/cruises/2019/04/12/57-fascinating-facts-titanic/3448724002>`_

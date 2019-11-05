@@ -1,4 +1,6 @@
-date, model, accuracy, recall, precision, f1, holdout_accuracy
-10/28/19, dummy_most_frequent, 0.6223, 0, 0, 0, NS
-10/28/19, logreg_gender_only, 0.7958, 0.6959, 0.7455, 0.7189, 0.76555
-10/28/19, logreg model_1, 0.8286, 0.7238,0.8013,0.7602, NS
+date,     model,                holdout_accuracy, accuracy, recall,     precision, f1
+10/28/19, dummy_most_frequent,  NS,               0.6223,   0,          0,          0
+10/28/19, logreg_gender_only,   0.76555,          0.7958,   0.6959,     0.7455,     0.7189
+10/28/19, logreg model_1,       0.77990,          0.8286,   0.7238,     0.8013,     0.7602 
+10/28/19, logreg model_2,       0.78468,          0.8286,   0.7200,     0.8037,     0.7592 
+10/28/19, logreg model_3,       0.79425,          0.8384,   0.7162,     0.8306,     0.7691

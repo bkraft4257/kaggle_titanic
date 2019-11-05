@@ -74,32 +74,94 @@ These are copied directly from `Kaggle Titanic Data <https://www.kaggle.com/c/ti
     may be useful information in this feature, however, it will
     be ignored in the initial modality.
 
-.. _model-logreg:
+Model: Dummy Classifier Most Frequent (model_dummy)
+---------------------------------------------------
 
-Model: Dummy Classifier Most Frequent
--------------------------------------
+accuracy =  0.6223
+kaggle holdout accuracy = NS
+
+A created a Dummy Classifier as a base model. The prediction was to use
+the most frequent, in this case perished.  The accuracy with this model
+is 0.6223. This model was not submitted to Kaggle.
 
 
-Model: Sex Only
----------------
+Model: Gender Only (logreg_gender_only)
+---------------------------------------
 
+accuracy =  0.7958
+kaggle holdout accuracy = 0.76555
 
-Model: Logistic Regression Model 1
------------------------------------
+The next model was based upon gender only. In this case, the model predicts
+that all men die and all women survive.  This results in an accuracy of
+0.7958 with Kaggle Holdout Accuracy of 0.76555.
+
+Model: Logistic Regression Model (logreg_model_1)
+-------------------------------------------------
+
+accuracy =  0.8286
+kaggle holdout accuracy = 0.77990
 
 ... model-logreg_1:
-        Index(['age', 'fare', 'family_size', 'is_child', 'is_travelling_alone',
-           'sex_male', 'embarked_Q', 'embarked_S', 'title_Miss', 'title_Mr',
-           'title_Mrs', 'age_bin_(10.0, 20.0]', 'age_bin_(20.0, 30.0]',
-           'age_bin_(30.0, 40.0]', 'age_bin_(40.0, 50.0]', 'age_bin_(50.0, 60.0]',
-           'age_bin_(60.0, inf]'],
-           dtype='object')
+    Index(['age', 'fare', 'family_size', 'is_child', 'is_travelling_alone',
+    'sex_male', 'embarked_Q', 'embarked_S', 'title_Miss', 'title_Mr',
+    'title_Mrs', 'age_bin_(10.0, 20.0]', 'age_bin_(20.0, 30.0]',
+    'age_bin_(30.0, 40.0]', 'age_bin_(40.0, 50.0]', 'age_bin_(50.0, 60.0]',
+    'age_bin_(60.0, inf]'],
+    dtype='object')
 
-    LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
-                       intercept_scaling=1, l1_ratio=None, max_iter=100,
-                       multi_class='warn', n_jobs=None, penalty='l2',
-                       random_state=None, solver='warn', tol=0.0001, verbose=0,
-                       warm_start=False)
+    LogisticRegression(C=1.0, class_weight=None, dual=False,
+    fit_intercept=True,
+    intercept_scaling=1, l1_ratio=None, max_iter=100,
+    multi_class='warn', n_jobs=None, penalty='l2',
+    random_state=None, solver='warn', tol=0.0001, verbose=0,
+    warm_start=False)
+
+Model: Logistic Regression Model (logreg_model_2)
+-------------------------------------------------
+
+This model is a logreg_model_1 with reduced features.  The features were
+selected using YellowBricks Rank1D.
+
+
+accuracy =  0.8286
+kaggle holdout accuracy = 0.78468
+
+... model-logreg_2:
+
+    Index(['title_Mr', 'title_Mrs', 'family_size', 'is_child', 'fare'],
+    dtype='object')
+
+    LogisticRegression(C=1.0, class_weight=None, dual=False,
+    fit_intercept=True,
+    intercept_scaling=1, l1_ratio=None, max_iter=100,
+    multi_class='warn', n_jobs=None, penalty='l2',
+    random_state=None, solver='warn', tol=0.0001, verbose=0,
+    warm_start=False)
+
+Model: Logistic Regression Model (logreg_model_3)
+-------------------------------------------------
+
+In reviewing logreg_model_1 and logreg_model_2, I noticed that I had
+inadvertently left out the pclass feature. I reran the model with
+this feature and then did feature selection with FeatureImportance.
+The pclass had more importance than fare so I eliminated fare and
+submitted the model.
+
+accuracy =  0.8384
+kaggle holdout accuracy = 0.79425
+
+... model-logreg_3:
+
+    Index(['title_Mr', 'title_Mrs', 'family_size', 'is_child', 'pclass'],
+    dtype='object')
+
+    LogisticRegression(C=1.0, class_weight=None, dual=False,
+    fit_intercept=True,
+    intercept_scaling=1, l1_ratio=None, max_iter=100,
+    multi_class='warn', n_jobs=None, penalty='l2',
+    random_state=None, solver='warn', tol=0.0001, verbose=0,
+    warm_start=False)
+
 
 Kaggle Results
 --------------

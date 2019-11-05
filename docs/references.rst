@@ -10,19 +10,18 @@ These references provide insight into the Titanic problem.
 `99% Accuracy <https://www.kaggle.com/ldfreeman3/a-data-science-framework-to-achieve-99-accuracy/notebook>`_
     Excellent analysis of Titanic Competition.
 
-https://stackoverflow.com/questions/39163354/evaluating-logistic-regression-with-cross-validation
-
 http://www.owlnet.rice.edu/~ns10/Kaggle/pdfs/Titanic_Project.pdf
 
-https://www.kaggle.com/c/titanic/discussion/26284
+`What's a Good Score for the Titanic Competition? <https://www.kaggle.com/c/titanic/discussion/26284>`_
 
-https://www.kaggle.com/c/titanic/discussion/57447
+`How to score over 82% Titanic <https://www.kaggle.com/c/titanic/discussion/57447>`_
 
 
-
-Kaggle kernels of interest 
+Kaggle kernels of interest
 --------------------------
+Comparison of various models. He was able to score 86.96% accuracy with the
+test data set.  The accuracy with the Kaggle Holdout data set was not reported.
 
-https://www.kaggle.com/josh24990/simple-end-to-end-ml-workflow-top-5-score
+`Simple end-to-end ML Workflow: Top 5% score <https://www.kaggle.com/josh24990/simple-end-to-end-ml-workflow-top-5-score>`_
 
 
