@@ -83,4 +83,114 @@ Oct 28, 2019 at 9:35:23 AM
     I recommend exploring the use of Decision Trees for the Kaggle competition.
 
 
+Nov 5, 2019 at 10:48:56 AM
+--------------------------
 
+I am returning to this project after a hiatus. Current accuracy with Logistic
+Regression is **0.8384** but only 0.79425.  I am going to switch to Decision
+Trees.
+
+I created two simple decision tree models. The first one used the same features
+as logistical regression model 3.  The second one selected features as
+suggested by YellowBrick. Both models had an accuracy less than logreg_model_3.
+
+I also came across a model a web page the discussed how to use Decision Trees
+in scikit-learn by Ben Keen. 
+
+http://benalexkeen.com/decision-tree-classifier-in-python-using-scikit-learn/
+
+While I was working on Decision Trees I noticed that the predicted accuracy
+score is much lower than the Cross Validated Accuracy score for the Titanic
+data set.
+
+
+    DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+                           max_features=None, max_leaf_nodes=None,
+                           min_impurity_decrease=0.0, min_impurity_split=1e-07,
+                           min_samples_leaf=1, min_samples_split=2,
+                           min_weight_fraction_leaf=0.0, presort=False,
+                           random_state=1, splitter='best')
+
+    Accuracy Score on X_test,y_test:  0.8182
+    
+    Cross Validation Scores:
+    	* Accuracy 	: 0.7407 (+/- 0.0664)
+    	* Recall		: 0.7078 (+/- 0.2161)
+    	* Precision	: 0.6726 (+/- 0.0548)
+    	* F1		: 0.6864 (+/- 0.1197)
+
+I don't know why this happens. Is it possible that the distributions of the
+Train, Test, and Holdout data sets are different? Great Expectations may
+be helpful in sorting this out.
+
+Another possibility is the imbalance of the the training data. I
+rebalanced the data set by undersampling.  This did not solve the
+problem.
+
+
+Nov 6, 2019 at 11:35:47 AM
+--------------------------
+
+Yesterday I observed that the accuracy from the test data set always had a
+larger variance than the cross validation accuracy.  I didn't understand
+why this would be the case and wanted to explore this further.  Here is an
+example of the distribution and code.
+
+.. code-block:: python
+    :linenos:
+
+    def check_accuracy_by_random_sampling(X,y):
+
+        accuracy = []
+        n_random=1000
+        RANDOM_STATE_RANGE = list(range(0,n_random,1))
+        len(RANDOM_STATE_RANGE)
+        verbose = False
+
+        pbar = ProgressBar(maxval=n_random).start()
+
+        for i, random_state in enumerate(RANDOM_STATE_RANGE, start=0):
+
+            X_train, X_test, y_train, y_test = train_test_split(X,
+                                                                y,
+                                                                test_size=0.2,
+                                                                random_state=random_state)
+
+            model = DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+                            max_features=None, max_leaf_nodes=None,
+                            min_impurity_split=1e-07, min_samples_leaf=1,
+                            min_samples_split=2, min_weight_fraction_leaf=0.0,
+                            presort=False, random_state=random_state, splitter='best');
+
+            _ = model.fit(X_train, y_train);
+
+            (ii_y_pred,
+             ii_predicted_accuracy_score, 
+             ii_cv_scores ) = pm.calc_model_rst_table_metrics(model, X_train, y_train, X_test, y_test, 
+                                                              model_name='dtree_reference', cv=5, verbose=verbose)
+
+    
+            accuracy.append( [random_state,
+                                  ii_predicted_accuracy_score, 
+                                  np.mean(ii_cv_scores['test_accuracy']),
+                                  np.std(ii_cv_scores['test_accuracy'])])
+
+            pbar.update(i)
+
+        pbar.finish()
+
+        return np.array(accuracy)
+
+    accuracy = check_accuracy_by_random_sampling(X,y)
+
+
+.. figure:: _images/decision_tree_accuracy_comparison.png
+    
+    Histogram of the test accuracy and the 5 fold cross validation accuracy.  You
+    will notice that the standard deviation of the cross validation accuracy is
+    much smaller than the test accuracy.
+  
+The reason why the standard deviation of the cross validation accuracy is
+smaller than the standard deviation of the test accuracy is because the cross
+validation accuracy is an average across all the folds.  This averaging is the
+reason for the smaller spread in values.
