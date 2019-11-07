@@ -18,7 +18,9 @@ http://www.owlnet.rice.edu/~ns10/Kaggle/pdfs/Titanic_Project.pdf
 
 Discussions
 -----------
-`Titanic [0.83253] - Find more accurate models for the same 3-16 features<https://www.kaggle.com/c/titanic/discussion/113220#latest-651725>`_
+`Titanic [0.83253] - Find more accurate models for the same 3-16 features <https://www.kaggle.com/c/titanic/discussion/113220#latest-651725>`_
+
+`20 Popular Models <https://www.kaggle.com/vbmokin/titanic-0-83253-comparison-20-popular-models>`_
 
 
 Kaggle kernels of interest

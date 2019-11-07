@@ -5,6 +5,9 @@ from pathlib import Path
 from nameparser import HumanName
 from sklearn.preprocessing import scale
 
+from IPython.display import display
+from collections import Counter
+
 
 class ExtractData:
     """Extract Titanic data from the Kaggle's train.csv file.
@@ -41,7 +44,7 @@ class ExtractData:
 
     def extract_raw(self):
         """
-        Extracts data from a CSV file.  
+        Extracts data from a CSV file.
 
         Returns:
             pd.DataFrame -- [description]
@@ -56,19 +59,19 @@ class ExtractData:
 
 class TransformData:
 
-    """ 
+    """
     TransformData takes the raw extracted data cleans and creates new features before
-    returning a new dataframe. 
+    returning a new dataframe.
 
     The training and test data contain the following:
         * 1 Lady. She was traveling with a sibling and no husband. Set title to Miss
-        * 2 Mlle and 1 Mme. All 3 were 24 years old and travelling alone.  Retitled as Miss.
-        * 1 Sir. Male 49 years old. Travelling with a sibling.
+        * 2 Mlle and 1 Mme. All 3 were 24 years old and traveling alone.  Retitled as Miss.
+        * 1 Sir. Male 49 years old. traveling with a sibling.
         * Revs were all males.
         * 8 Drs. (7 male, 1 female) changed to Mr. and Mrs. respectively.
     """
 
-    title_translator = {
+    translate_title_dictionary = {
         "Mlle.": "Miss.",
         "Mme.": "Miss.",
         "Sir.": "Mr.",
@@ -86,39 +89,65 @@ class TransformData:
         raw_data,
         adult_age_threshold_min=13,
         age_bins=None,
-        fare_mode=None,
+        age_bin_label=None,
         embarked_mode=None,
         Xy_age_estimate=None,
         drop_columns=None,
+        translate_title_dictionary=None,
+        fare_mode=None,
+        fare_bins=None,
+        fare_bin_labels=["q1", "q2", "q3", "q4"],
     ):
         """Transform Data according to the rules established in the EDA. To apply
-        the same rules to another data set you must explicitly pass in 
+        the same rules to another data set you must explicitly pass in
 
         * adult_age_threshold_min
-        * age_bins 
+        * age_bins
         * fare_mode
         * embarked_mode
         * Xy_age_estimate
 
         Arguments:
-             filename {[str]} -- Filename of CSV data file containing data.
+             filename [str|Path] -- Filename of CSV data file containing data.
              drop_columns -- Columns in dataframe that should be dropped.
         """
+        if translate_title_dictionary is None:
+            translate_title_dictionary = self.translate_title_dictionary
 
         if age_bins is None:
-            age_bins = [0, 10, 20, 30, 40, 50, 60, np.inf]
+            # Old age_bins are here.
+            # age_bins = [0, 10, 20, 30, 40, 50, 60, np.inf]
+            age_bins = (0, 5, 12, 18, 25, 35, 60, 120)
 
+        if age_bin_label is None:
+            age_bin_label = [
+                "baby",
+                "child",
+                "teen",
+                "student",
+                "young_adult",
+                "adult",
+                "senior",
+            ]
+
+        assert len(age_bins) == len(age_bin_label) + 1
+
+        self.translate_title_dictionary = translate_title_dictionary
         self.Xy_age_estimate = Xy_age_estimate
 
         self.raw = raw_data
         self.adult_age_threshold_min = adult_age_threshold_min
         self.drop_columns = drop_columns
         self.age_bins = age_bins
+        self.age_bin_label = age_bin_label
 
         self.Xy = self.raw.Xy_raw.copy()
 
         if fare_mode is None:
             fare_mode = self.Xy["fare"].mode()[0]
+
+        self.fare_bins = fare_bins
+        self.fare_bin_labels = fare_bin_labels
 
         if embarked_mode is None:
             embarked_mode = self.Xy["embarked"].mode()[0]
@@ -136,21 +165,22 @@ class TransformData:
         self.calc_family_size()
         self.estimate_age()
         self.calc_age_bins()
+        self.calc_fare_bins()
         self.calc_is_child()
-        self.calc_is_travelling_alone()
+        self.calc_is_traveling_alone()
 
         self.Xy = self.Xy.sort_index()
 
     def calc_family_size(self):
         """Create feature family size, which is the number of people (including
-        self) that are traveling together. 
+        self) that are traveling together.
         """
         self.Xy["family_size"] = self.Xy.sibsp + self.Xy.parch + 1
 
-    def calc_is_travelling_alone(self):
-        """Create Boolean feature if passenger is travelling alone. (True=Traveling alone, False=Traveling in group)
+    def calc_is_traveling_alone(self):
+        """Create Boolean feature if passenger is traveling alone. (True=Traveling alone, False=Traveling in group)
         """
-        self.Xy["is_travelling_alone"] = self.Xy["family_size"] == 1
+        self.Xy["is_traveling_alone"] = self.Xy["family_size"] == 1
 
     def calc_is_child(self):
         """Calculate Boolean feature if passenger is a child as determined by the self.adult_age_threshold_min
@@ -158,7 +188,7 @@ class TransformData:
         self.Xy["is_child"] = self.Xy.age < self.adult_age_threshold_min
 
     def extract_cabin_number(self):
-        """ 
+        """
         Extracts cabin number from ticket.
         """
         self.Xy["cabin_number"] = self.Xy.ticket.str.extract("(\d+)$")
@@ -178,8 +208,8 @@ class TransformData:
         """
         title = (
             self.Xy.name.apply(lambda x: HumanName(x).title)
-            .replace(self.title_translator)
-            .replace({"\.": ""}, regex=True)
+            .replace({r"\.": ""}, regex=True)
+            .replace(self.translate_title_dictionary)
             .replace({"": np.nan})
             .fillna(self.Xy["sex"])
             .replace({"female": "Mrs", "male": "Mr"})
@@ -192,22 +222,50 @@ class TransformData:
         self.Xy["last_name"] = self.Xy.name.apply(lambda x: HumanName(x).last)
 
     def calc_age_bins(self):
-        """Calculates age bins. 
+        """Calculates age bins.
         """
-        self.Xy["age_bin"] = pd.cut(self.Xy.age, bins=self.age_bins)
+        self.Xy["age_bin"] = pd.cut(
+            self.Xy.age, bins=self.age_bins, labels=self.age_bin_label
+        )
+
+    def calc_fare_bins(self):
+        """Calculates fare bins.
+
+           If fare_bins is None then calculate the fare_bins based upon the
+           quartiles. If fare_bins is a list then calculate the fair_bin using
+           pd.cut()
+        """
+
+        if self.fare_bins is None:
+            self.Xy["fare_bin"] = pd.qcut(
+                self.Xy.fare.fillna(-1),
+                q=[0, 0.25, 0.5, 0.75, 1.0],
+                labels=self.fare_bin_labels,
+            )
+
+            self.fare_bins = (
+                [0] + self.Xy.groupby(["fare_bin"]).fare.max().tolist()[0:-1] + [1000]
+            )
+
+        else:
+            self.Xy["fare_bin"] = pd.cut(
+                self.Xy.fare, bins=self.fare_bins, labels=self.fare_bin_labels
+            )
+
+        assert (len(self.fare_bins) - 1) == len(self.fare_bin_labels)
 
     def clean(self,):
         """Clean data to remove missing data and "unnecessary" features.
-        
+
         Arguments:
             in_raw_df {pd.DataFrame} -- Dataframe containing all columns and rows Kaggle Titanic Training Data set
         """
         self.Xy = self.Xy_raw.drop(self.drop_columns, axis=1)
 
     def estimate_age(self, groupby_columns=["sex", "title"]):
-        """Estimate age of passenger when age is unknown.   The age will be 
-        estimated according to the group as specified in the groupby_columns. 
-        
+        """Estimate age of passenger when age is unknown.   The age will be
+        estimated according to the group as specified in the groupby_columns.
+
         Keyword Arguments:
             groupby_columns {list} -- [description] (default: {["sex", "title"]})
         """
@@ -223,7 +281,9 @@ class TransformData:
 
         out_df = (
             self.Xy.reset_index()
-            .merge(self.Xy_age_estimate, on=groupby_columns)
+            .merge(
+                self.Xy_age_estimate, on=groupby_columns, how="left", indicator=False
+            )
             .set_index("passengerid")
         )
 
@@ -232,14 +292,14 @@ class TransformData:
         self.Xy = out_df
 
     def impute_missing_fare(self):
-        """Imputes missing fare based upon only the most frequent fare. This 
-        could be improved by looking at additional features. In particular, 
-        the number of passengers in the party and pclass. 
+        """Imputes missing fare based upon only the most frequent fare. This
+        could be improved by looking at additional features. In particular,
+        the number of passengers in the party and pclass.
         """
         self.Xy["fare"] = self.Xy["fare"].fillna(self.fare_mode)
 
     def impute_missing_embarked(self):
-        """Imputes missing embarkment location based upon the most frequent 
+        """Imputes missing embarkment location based upon the most frequent
         place to embark.
         """
         self.Xy["embarked"] = self.Xy["embarked"].fillna(self.embarked_mode)
@@ -256,11 +316,12 @@ def transform_X_numerical(Xy, columns=["age", "fare", "family_size"]):
 
 def transform_X_categorical(
     Xy,
-    columns=["sex", "embarked", "title", "age_bin", "is_child", "is_travelling_alone"],
+    columns=["sex", "embarked", "title", "age_bin", "is_child", "is_traveling_alone"],
+    drop_first=True,
 ):
 
     # Encode the categorical features. The first category will be dropped.
-    return pd.get_dummies(Xy[columns], drop_first=False)
+    return pd.get_dummies(Xy[columns], drop_first=drop_first)
 
 
 def transform_X(
@@ -272,7 +333,7 @@ def transform_X(
         "title",
         "age_bin",
         "is_child",
-        "is_travelling_alone",
+        "is_traveling_alone",
         "pclass",
     ],
 ):

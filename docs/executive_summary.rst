@@ -12,8 +12,9 @@ Executive Summary
     set.
 
 **Best Model**
-    Logistic Regression Model 3 0.8384
-    Kaggle Holdout Accuracy = 0.79425
+    Logistic Regression Model 3
+        Test Accuracy           = 0.8384
+        Kaggle Holdout Accuracy = 0.7943
 
 **Current Status**
     :ref:`log-current-status`

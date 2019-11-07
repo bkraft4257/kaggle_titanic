@@ -56,7 +56,7 @@ Oct 28, 2019 at 9:35:23 AM
     Things that need attention:
     * Autodoc is not included in the Sphinx documentation.
     * Default Spinx theme should be replaced with Read The Docs theme.
-    https://sphinx-rtd-theme.readthedocs.io/en/stable/ 
+    https://sphinx-rtd-theme.readthedocs.io/en/stable/
 
 **Situation**
     I am able to achieve a 0.8384 accuracy score on the test data set. However,
@@ -95,7 +95,7 @@ as logistical regression model 3.  The second one selected features as
 suggested by YellowBrick. Both models had an accuracy less than logreg_model_3.
 
 I also came across a model a web page the discussed how to use Decision Trees
-in scikit-learn by Ben Keen. 
+in scikit-learn by Ben Keen.
 
 http://benalexkeen.com/decision-tree-classifier-in-python-using-scikit-learn/
 
@@ -112,7 +112,7 @@ data set.
                            random_state=1, splitter='best')
 
     Accuracy Score on X_test,y_test:  0.8182
-    
+
     Cross Validation Scores:
     	* Accuracy 	: 0.7407 (+/- 0.0664)
     	* Recall		: 0.7078 (+/- 0.2161)
@@ -165,13 +165,13 @@ example of the distribution and code.
             _ = model.fit(X_train, y_train);
 
             (ii_y_pred,
-             ii_predicted_accuracy_score, 
-             ii_cv_scores ) = pm.calc_model_rst_table_metrics(model, X_train, y_train, X_test, y_test, 
+             ii_predicted_accuracy_score,
+             ii_cv_scores ) = pm.calc_model_rst_table_metrics(model, X_train, y_train, X_test, y_test,
                                                               model_name='dtree_reference', cv=5, verbose=verbose)
 
-    
+
             accuracy.append( [random_state,
-                                  ii_predicted_accuracy_score, 
+                                  ii_predicted_accuracy_score,
                                   np.mean(ii_cv_scores['test_accuracy']),
                                   np.std(ii_cv_scores['test_accuracy'])])
 
@@ -185,11 +185,11 @@ example of the distribution and code.
 
 
 .. figure:: _images/decision_tree_accuracy_comparison.png
-    
+
     Histogram of the test accuracy and the 5 fold cross validation accuracy.  You
     will notice that the standard deviation of the cross validation accuracy is
     much smaller than the test accuracy.
-  
+
 The reason why the standard deviation of the cross validation accuracy is
 smaller than the standard deviation of the test accuracy is because the cross
 validation accuracy is an average across all the folds.  This averaging is the
@@ -201,3 +201,57 @@ Nov 6, 2019 at 1:58:42 PM
 
 I have been unable to improve the accuracy with basic decision trees.  I am
 going to try to use XGBoost.
+
+Nov 7, 2019 at 9:49:42 AM
+-------------------------
+
+I still have been unable to improve my accuracy with XGBoost.  I am going to
+try three things based upon a kernal from Leonardo Ferreira.
+
+https://www.kaggle.com/kabure/titanic-eda-model-pipeline-keras-nn
+
+1. Update the Titles to be a litte more descriptive. The Titles have been
+set to Mr. and Mrs.  This is based upon sex and age.  However, the Titles are
+more descriptive than this.  For example, we can specify crew members.  I am
+going to reassign the titles according to the suggestions of Leonardo Ferreira.
+
+.. code-block:: python
+
+    Title_Dictionary = {
+            "Capt":       "Officer",
+            "Col":        "Officer",
+            "Major":      "Officer",
+            "Dr":         "Officer",
+            "Rev":        "Officer",
+            "Jonkheer":   "Royalty",
+            "Don":        "Royalty",
+            "Sir" :       "Royalty",
+            "the Countess":"Royalty",
+            "Dona":       "Royalty",
+            "Lady" :      "Royalty",
+            "Mme":        "Mrs",
+            "Ms":         "Mrs",
+            "Mrs" :       "Mrs",
+            "Mlle":       "Miss",
+            "Miss" :      "Miss",
+            "Mr" :        "Mr",
+            "Master" :    "Master"
+                    }
+
+2. For the previous models, I have used the numeric value of the age.  I am
+going to bin the age according to these categories.
+
+.. code-block:: python
+
+    age_bins = (0, 5, 12, 18, 25, 35, 60, 120)
+    age_bin_label =   ['baby','child','teen','student','young_adult','adult','senior']
+
+
+3. For the previous models, I have used the Fare as a numeric value.  I am
+going to split the Fare into quartiles.  I split the Fare into quartiles with
+pd.qcut() on the training data set and then applied the same binning ranges to
+the holdout data using pd.cut().
+
+
+I have implemented all three of these new features and my Kaggle Public score
+dropped to 0.7790.
