@@ -194,3 +194,10 @@ The reason why the standard deviation of the cross validation accuracy is
 smaller than the standard deviation of the test accuracy is because the cross
 validation accuracy is an average across all the folds.  This averaging is the
 reason for the smaller spread in values.
+
+
+Nov 6, 2019 at 1:58:42 PM
+-------------------------
+
+I have been unable to improve the accuracy with basic decision trees.  I am
+going to try to use XGBoost.

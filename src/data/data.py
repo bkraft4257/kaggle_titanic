@@ -3,6 +3,7 @@ import numpy as np
 from typing import Union
 from pathlib import Path
 from nameparser import HumanName
+from sklearn.preprocessing import scale
 
 
 class ExtractData:
@@ -99,8 +100,6 @@ class TransformData:
         * embarked_mode
         * Xy_age_estimate
 
-
-
         Arguments:
              filename {[str]} -- Filename of CSV data file containing data.
              drop_columns -- Columns in dataframe that should be dropped.
@@ -147,7 +146,7 @@ class TransformData:
         self) that are traveling together. 
         """
         self.Xy["family_size"] = self.Xy.sibsp + self.Xy.parch + 1
-        
+
     def calc_is_travelling_alone(self):
         """Create Boolean feature if passenger is travelling alone. (True=Traveling alone, False=Traveling in group)
         """
@@ -160,7 +159,7 @@ class TransformData:
 
     def extract_cabin_number(self):
         """ 
-        Extracts cabin number from ticket. 
+        Extracts cabin number from ticket.
         """
         self.Xy["cabin_number"] = self.Xy.ticket.str.extract("(\d+)$")
 
@@ -172,9 +171,9 @@ class TransformData:
     def extract_title(self):
         """Extract title from the name using nameparser.
 
-        If the Title is empty then we will fill the title with either Mr or Mrs depending upon the sex.  This 
+        If the Title is empty then we will fill the title with either Mr or Mrs depending upon the sex.  This
         is adequate for the train and holdout data sets.  The title being empty only occurs for passenger 1306
-        in the holdout data set.  A more appropriate way to do this is to check on the sex and age to correctly 
+        in the holdout data set.  A more appropriate way to do this is to check on the sex and age to correctly
         assign the title
         """
         title = (
@@ -206,8 +205,8 @@ class TransformData:
         self.Xy = self.Xy_raw.drop(self.drop_columns, axis=1)
 
     def estimate_age(self, groupby_columns=["sex", "title"]):
-        """Estimate age of passenger when age is unknown.   The age will be estimated according to the 
-        group as specified in the groupby_columns. 
+        """Estimate age of passenger when age is unknown.   The age will be 
+        estimated according to the group as specified in the groupby_columns. 
         
         Keyword Arguments:
             groupby_columns {list} -- [description] (default: {["sex", "title"]})
@@ -244,3 +243,44 @@ class TransformData:
         place to embark.
         """
         self.Xy["embarked"] = self.Xy["embarked"].fillna(self.embarked_mode)
+
+
+# =============================================================================
+
+
+def transform_X_numerical(Xy, columns=["age", "fare", "family_size"]):
+
+    # Scale the numerical columns.
+    return pd.DataFrame(scale(Xy[columns]), index=Xy.index, columns=columns)
+
+
+def transform_X_categorical(
+    Xy,
+    columns=["sex", "embarked", "title", "age_bin", "is_child", "is_travelling_alone"],
+):
+
+    # Encode the categorical features. The first category will be dropped.
+    return pd.get_dummies(Xy[columns], drop_first=False)
+
+
+def transform_X(
+    Xy,
+    numerical_columns=["age", "fare", "family_size"],
+    categorical_columns=[
+        "sex",
+        "embarked",
+        "title",
+        "age_bin",
+        "is_child",
+        "is_travelling_alone",
+        "pclass",
+    ],
+):
+
+    # Scale the numerical columns.
+    X_numerical = transform_X_numerical(Xy, numerical_columns)
+
+    # Encode the categorical features. The first category will be dropped.
+    X_cat_encoded = transform_X_categorical(Xy, categorical_columns)
+
+    return X_numerical.join(X_cat_encoded)

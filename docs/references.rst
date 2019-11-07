@@ -16,6 +16,10 @@ http://www.owlnet.rice.edu/~ns10/Kaggle/pdfs/Titanic_Project.pdf
 
 `How to score over 82% Titanic <https://www.kaggle.com/c/titanic/discussion/57447>`_
 
+Discussions
+-----------
+`Titanic [0.83253] - Find more accurate models for the same 3-16 features<https://www.kaggle.com/c/titanic/discussion/113220#latest-651725>`_
+
 
 Kaggle kernels of interest
 --------------------------
@@ -23,5 +27,6 @@ Comparison of various models. He was able to score 86.96% accuracy with the
 test data set.  The accuracy with the Kaggle Holdout data set was not reported.
 
 `Simple end-to-end ML Workflow: Top 5% score <https://www.kaggle.com/josh24990/simple-end-to-end-ml-workflow-top-5-score>`_
+
 
 

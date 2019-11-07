@@ -15,15 +15,20 @@ from sklearn.model_selection import cross_val_score, cross_val_score, cross_vali
 def concat_to_create_xy_test(
     X_test: pd.DataFrame, y_test: pd.DataFrame, y_pred: np.array
 ):
-    """Concat X,y, and y_predictions to a common dataframe. 
+    """Join X,y, and y_predictions to a common dataframe.  The index of the 
+       all the dataframes must be the same. 
     
     Arguments:
-        X_test {[dataframe]} -- [description]
-        y_test {[dataframe]} -- [description]
-        y_pred {[np.array]} -- [description]
+        X_test [dataframe] -- Test data that matches your model.
+        y_test [dataframe] -- Labels that match your model.
+        y_pred [dataframe] -- Predicted labels.   
     
     Returns:
-        [dataframe] -- [description]
+        [dataframe] -- Joined dataframe.  The column is_prediction_correct is
+        added according to 
+
+        Xy_test["is_prediction_correct"] = Xy_test["survived_pred"] == Xy_test["survived"]
+
     """
     Xy_test = X_test.join(y_test).join(y_pred)
     Xy_test["is_prediction_correct"] = Xy_test["survived_pred"] == Xy_test["survived"]
@@ -32,6 +37,19 @@ def concat_to_create_xy_test(
 
 
 def calc_metrics(Xy_test):
+    """
+    Calculates the LogLoss and accuracy of the 
+    
+    Arguments:
+        Xy_test [dataframe] -- This is the joined dataframe from created by 
+        concat_to_create_xy_test
+    
+    Returns:
+        dictionary -- Calculates the LogLoss and accuracy
+
+        metric['log_loss']
+        metric['accuracy']
+    """
     metric = {}
     metric["log_loss"] = log_loss(
         Xy_test["survived"].values, Xy_test["survived_pred"].values
@@ -41,15 +59,43 @@ def calc_metrics(Xy_test):
     return metric
 
 
+def fit_and_predict_model(model, X_train, y_train, X_test, y_test):
+    """
+        Fit and predict the model.
+
+        Arguments:
+            X_train {array | dataframe} -- Training data to be fitted to the model. 
+            y_train {array | dataframe} -- Training labels to be fitted to the model. 
+
+        Returns:
+            y_pred -- 
+        """
+    print("feature list ...")
+    print(f"{X_train.columns.tolist()}\n")
+
+    model.fit(X_train, y_train)
+
+    y_pred = pd.Series(
+        model.predict(X_test), index=y_test.index, name="survived_pred"
+    ).to_frame()
+
+    scores = cross_val_score(model, X_train, y_train, cv=10)
+    print(f"Cross Validation Accuracy Scores: {scores}")
+    print("\n\nAccuracy: %0.4f (+/- %0.5f)\n\n" % (scores.mean(), scores.std() * 2))
+
+    return y_pred
+
+
 def calc_logreg_model(X_train, y_train, X_test, y_test):
     """
 
         Arguments:
-            X_train {[type]} -- [description]
-            y_train {[type]} -- [description]
+            X_train {array | dataframe} -- Training data to be fitted to the model. 
+            y_train {array | dataframe} -- Training labels to be fitted to the model. 
 
         Returns:
-            [type] -- [description]
+            logreg -- 
+            y_pred -- [description]
         """
     print("feature list ...")
     print(f"{X_train.columns.tolist()}\n")
@@ -134,7 +180,9 @@ def calc_model_rst_table_metrics(
     """
     cv_scores = cross_validate(model, X_train, y_train, cv=cv, scoring=scoring)
 
-    y_pred, predicted_accuracy_score = calc_model_predictions(model, X_test, y_test, verbose=verbose)
+    y_pred, predicted_accuracy_score = calc_model_predictions(
+        model, X_test, y_test, verbose=verbose
+    )
 
     if verbose:
         display_rst_table_metrics_log(cv_scores, model_name=model_name)
@@ -149,14 +197,14 @@ def display_rst_table_metrics_log(cv_scores, model_name="<model_name>"):
     for tracking.  If one wishes to track the results they may appended to the
     model_accuracy.csv file.  
 
-    date,     model,                holdout_accuracy, accuracy, recall,     precision, f1
-    10/28/19, dummy_most_frequent,  NS,               0.6223,   ,           ,           
-    10/28/19, logreg_gender_only,   0.76555,          0.7958,   0.6959,     0.7455,     0.7189
-    10/28/19, logreg model_1,       0.77990,          0.8286,   0.7238,     0.8013,     0.7602 
-    10/28/19, logreg model_2,       0.78468,          0.8286,   0.7200,     0.8037,     0.7592 
-    10/28/19, logreg model_3,       0.79425,          0.8384,   0.7162,     0.8306,     0.7691
-    11/05/19, dtree_model_1,        0.77990,          0.8173,   0.6486,     0.8310,     0.7251
-    11/05/19, dtree_model_2,        0.78468,          0.8272,   0.7012,     0.8143,     0.7516
+    | date,     model,                holdout_accuracy, accuracy, recall,     precision, f1
+    | 10/28/19, dummy_most_frequent,  NS,               0.6223,         ,           ,           
+    | 10/28/19, logreg_gender_only,   0.76555,          0.7958,   0.6959,     0.7455,     0.7189
+    | 10/28/19, logreg model_1,       0.77990,          0.8286,   0.7238,     0.8013,     0.7602 
+    | 10/28/19, logreg model_2,       0.78468,          0.8286,   0.7200,     0.8037,     0.7592 
+    | 10/28/19, logreg model_3,       0.79425,          0.8384,   0.7162,     0.8306,     0.7691
+    | 11/05/19, dtree_model_1,        0.77990,          0.8173,   0.6486,     0.8310,     0.7251
+    | 11/05/19, dtree_model_2,        0.78468,          0.8272,   0.7012,     0.8143,     0.7516
 
 
     Arguments:
