@@ -1,0 +1,995 @@
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Model:-Logistic-Regression-with-Age">Model: Logistic Regression with Age<a class="anchor-link" href="#Model:-Logistic-Regression-with-Age">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="https://www.kaggle.com/c/titanic/overview">https://www.kaggle.com/c/titanic/overview</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The model__logreg did not include age as a feature.  This model will include age.  Age with NaN in the entry will be replaced with the mean age of all passengers.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Initialization</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">run</span> init.ipynb
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<style>.container { width:80% !important; }</style>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">data.data</span> <span class="k">import</span> <span class="n">ExtractData</span>
+<span class="kn">from</span> <span class="nn">models</span> <span class="k">import</span> <span class="n">predict_model</span> <span class="k">as</span> <span class="n">pm</span>
+<span class="kn">from</span> <span class="nn">zeetle.data</span> <span class="k">import</span> <span class="n">eda</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span> 
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span> 
+
+<span class="n">RANDOM_STATE</span> <span class="o">=</span> <span class="mi">42</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Extract-Clean-Data">Extract Clean Data<a class="anchor-link" href="#Extract-Clean-Data">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Separate data into X (features) and y (label)</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">ExtractData</span><span class="p">(</span><span class="s1">&#39;../data/raw/train.csv&#39;</span><span class="p">,</span> <span class="n">drop_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cabin&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;ticket&#39;</span><span class="p">])</span>
+<span class="n">Xy</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Xy</span>
+
+<span class="n">Xy</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">Xy</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">Xy</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Verify that age has no NaN</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Xy</span><span class="p">[</span><span class="n">Xy</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">isna</span><span class="p">()]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[25]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>survived</th>
+      <th>pclass</th>
+      <th>sex</th>
+      <th>age</th>
+      <th>sibsp</th>
+      <th>parch</th>
+      <th>fare</th>
+      <th>embarked</th>
+    </tr>
+    <tr>
+      <th>passengerid</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Encode-Categorical-Columns">Encode Categorical Columns<a class="anchor-link" href="#Encode-Categorical-Columns">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Xy_encoded</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">Xy</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pclass&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;embarked&#39;</span><span class="p">],</span> <span class="n">drop_first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Train-Test-Split-Data">Train Test Split Data<a class="anchor-link" href="#Train-Test-Split-Data">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">Xy_encoded</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;survived&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Xy_encoded</span><span class="p">[</span><span class="s1">&#39;survived&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Number of sample in training data = {len(X_train)}&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Number of sample in test data = {len(X_test)}&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Number of sample in training data = 569
+Number of sample in test data = 143
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Logistic-Regression-with-Age">Logistic Regression with Age<a class="anchor-link" href="#Logistic-Regression-with-Age">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logreg</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="n">logreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span> 
+
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">logreg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[17]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+                   intercept_scaling=1, l1_ratio=None, max_iter=100,
+                   multi_class=&#39;warn&#39;, n_jobs=None, penalty=&#39;l2&#39;,
+                   random_state=None, solver=&#39;warn&#39;, tol=0.0001, verbose=0,
+                   warm_start=False)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Calculate-Metrics">Calculate Metrics<a class="anchor-link" href="#Calculate-Metrics">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Xy_test</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">concat_to_create_xy_test</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">calc_metrics</span><span class="p">(</span><span class="n">Xy_test</span><span class="p">)</span>
+
+<span class="n">metrics</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[18]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;log_loss&#39;: 6.762876477199374, &#39;accuracy&#39;: 0.8041958041958042}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Drill-Down">Drill Down<a class="anchor-link" href="#Drill-Down">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Xy_test</span><span class="o">.</span><span class="n">dtypes</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[54]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>age                      float64
+sibsp                      int64
+parch                      int64
+fare                     float64
+pclass_2                   uint8
+                          ...   
+embarked_Q                 uint8
+embarked_S                 uint8
+survived                   int64
+survived_pred              int64
+is_prediction_correct       bool
+Length: 12, dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Xy2</span> <span class="o">=</span> <span class="n">Xy</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Xy_test</span><span class="p">[[</span><span class="s1">&#39;survived_pred&#39;</span><span class="p">,</span> <span class="s1">&#39;is_prediction_correct&#39;</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[59]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Xy2</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">survived</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">Xy2</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">survived_pred</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[59]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>sex
+female    0.764706
+male      0.260870
+Name: survived, dtype: float64</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[59]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>sex
+female    0.843137
+male      0.065217
+Name: survived_pred, dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mask</span> <span class="o">=</span> <span class="n">Xy2</span><span class="p">[</span><span class="s1">&#39;is_prediction_correct&#39;</span><span class="p">]</span>
+<span class="n">Xy2</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;fare&#39;</span><span class="p">)</span>
+<span class="n">Xy2</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;fare&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[63]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>survived</th>
+      <th>pclass</th>
+      <th>sex</th>
+      <th>age</th>
+      <th>sibsp</th>
+      <th>parch</th>
+      <th>fare</th>
+      <th>embarked</th>
+      <th>survived_pred</th>
+      <th>is_prediction_correct</th>
+    </tr>
+    <tr>
+      <th>passengerid</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>844</td>
+      <td>0</td>
+      <td>3</td>
+      <td>male</td>
+      <td>34.5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6.4375</td>
+      <td>C</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>876</td>
+      <td>1</td>
+      <td>3</td>
+      <td>female</td>
+      <td>15.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.2250</td>
+      <td>C</td>
+      <td>1</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>781</td>
+      <td>1</td>
+      <td>3</td>
+      <td>female</td>
+      <td>13.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.2292</td>
+      <td>C</td>
+      <td>1</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>321</td>
+      <td>0</td>
+      <td>3</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.2500</td>
+      <td>S</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>95</td>
+      <td>0</td>
+      <td>3</td>
+      <td>male</td>
+      <td>59.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.2500</td>
+      <td>S</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>690</td>
+      <td>1</td>
+      <td>1</td>
+      <td>female</td>
+      <td>15.0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>211.3375</td>
+      <td>S</td>
+      <td>1</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>717</td>
+      <td>1</td>
+      <td>1</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>227.5250</td>
+      <td>C</td>
+      <td>1</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>312</td>
+      <td>1</td>
+      <td>1</td>
+      <td>female</td>
+      <td>18.0</td>
+      <td>2</td>
+      <td>2</td>
+      <td>262.3750</td>
+      <td>C</td>
+      <td>1</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>738</td>
+      <td>1</td>
+      <td>1</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>512.3292</td>
+      <td>C</td>
+      <td>1</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>680</td>
+      <td>1</td>
+      <td>1</td>
+      <td>male</td>
+      <td>36.0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>512.3292</td>
+      <td>C</td>
+      <td>1</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+<p>115 rows × 10 columns</p>
+</div>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[63]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>survived</th>
+      <th>pclass</th>
+      <th>sex</th>
+      <th>age</th>
+      <th>sibsp</th>
+      <th>parch</th>
+      <th>fare</th>
+      <th>embarked</th>
+      <th>survived_pred</th>
+      <th>is_prediction_correct</th>
+    </tr>
+    <tr>
+      <th>passengerid</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>763</td>
+      <td>1</td>
+      <td>3</td>
+      <td>male</td>
+      <td>20.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.2292</td>
+      <td>C</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>511</td>
+      <td>1</td>
+      <td>3</td>
+      <td>male</td>
+      <td>29.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.7500</td>
+      <td>Q</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>101</td>
+      <td>0</td>
+      <td>3</td>
+      <td>female</td>
+      <td>28.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.8958</td>
+      <td>S</td>
+      <td>1</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>415</td>
+      <td>1</td>
+      <td>3</td>
+      <td>male</td>
+      <td>44.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.9250</td>
+      <td>S</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>745</td>
+      <td>1</td>
+      <td>3</td>
+      <td>male</td>
+      <td>31.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.9250</td>
+      <td>S</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>103</td>
+      <td>0</td>
+      <td>1</td>
+      <td>male</td>
+      <td>21.0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>77.2875</td>
+      <td>S</td>
+      <td>1</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>454</td>
+      <td>1</td>
+      <td>1</td>
+      <td>male</td>
+      <td>49.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>89.1042</td>
+      <td>C</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>391</td>
+      <td>1</td>
+      <td>1</td>
+      <td>male</td>
+      <td>36.0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>120.0000</td>
+      <td>S</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>298</td>
+      <td>0</td>
+      <td>1</td>
+      <td>female</td>
+      <td>2.0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>151.5500</td>
+      <td>S</td>
+      <td>1</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>378</td>
+      <td>0</td>
+      <td>1</td>
+      <td>male</td>
+      <td>27.0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>211.5000</td>
+      <td>C</td>
+      <td>1</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+<p>28 rows × 10 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Xy2</span><span class="p">[</span><span class="o">~</span><span class="n">Xy2</span><span class="p">[</span><span class="s1">&#39;is_prediction_correct&#39;</span><span class="p">]]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-47-4b71083d131d&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>Xy2<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">~</span>Xy2<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;is_prediction_correct&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-green-fg">/Applications/anaconda3/envs/kaggle_titanic/lib/python3.7/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, key)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2984</span>             <span class="ansi-green-fg">if</span> is_iterator<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   2985</span>                 key <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">-&gt; 2986</span><span class="ansi-red-fg">             </span>indexer <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>loc<span class="ansi-blue-fg">.</span>_convert_to_indexer<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">,</span> axis<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> raise_missing<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2987</span> 
+<span class="ansi-green-intense-fg ansi-bold">   2988</span>         <span class="ansi-red-fg"># take() does not accept boolean indexers</span>
+
+<span class="ansi-green-fg">/Applications/anaconda3/envs/kaggle_titanic/lib/python3.7/site-packages/pandas/core/indexing.py</span> in <span class="ansi-cyan-fg">_convert_to_indexer</span><span class="ansi-blue-fg">(self, obj, axis, is_setter, raise_missing)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1283</span>                 <span class="ansi-red-fg"># When setting, missing keys are not allowed, even with .loc:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1284</span>                 kwargs <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">{</span><span class="ansi-blue-fg">&#34;raise_missing&#34;</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">True</span> <span class="ansi-green-fg">if</span> is_setter <span class="ansi-green-fg">else</span> raise_missing<span class="ansi-blue-fg">}</span>
+<span class="ansi-green-fg">-&gt; 1285</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_get_listlike_indexer<span class="ansi-blue-fg">(</span>obj<span class="ansi-blue-fg">,</span> axis<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   1286</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1287</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/Applications/anaconda3/envs/kaggle_titanic/lib/python3.7/site-packages/pandas/core/indexing.py</span> in <span class="ansi-cyan-fg">_get_listlike_indexer</span><span class="ansi-blue-fg">(self, key, axis, raise_missing)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1090</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1091</span>         self._validate_read_indexer(
+<span class="ansi-green-fg">-&gt; 1092</span><span class="ansi-red-fg">             </span>keyarr<span class="ansi-blue-fg">,</span> indexer<span class="ansi-blue-fg">,</span> o<span class="ansi-blue-fg">.</span>_get_axis_number<span class="ansi-blue-fg">(</span>axis<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> raise_missing<span class="ansi-blue-fg">=</span>raise_missing
+<span class="ansi-green-intense-fg ansi-bold">   1093</span>         )
+<span class="ansi-green-intense-fg ansi-bold">   1094</span>         <span class="ansi-green-fg">return</span> keyarr<span class="ansi-blue-fg">,</span> indexer
+
+<span class="ansi-green-fg">/Applications/anaconda3/envs/kaggle_titanic/lib/python3.7/site-packages/pandas/core/indexing.py</span> in <span class="ansi-cyan-fg">_validate_read_indexer</span><span class="ansi-blue-fg">(self, key, indexer, axis, raise_missing)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1175</span>                 raise KeyError(
+<span class="ansi-green-intense-fg ansi-bold">   1176</span>                     &#34;None of [{key}] are in the [{axis}]&#34;.format(
+<span class="ansi-green-fg">-&gt; 1177</span><span class="ansi-red-fg">                         </span>key<span class="ansi-blue-fg">=</span>key<span class="ansi-blue-fg">,</span> axis<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>obj<span class="ansi-blue-fg">.</span>_get_axis_name<span class="ansi-blue-fg">(</span>axis<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1178</span>                     )
+<span class="ansi-green-intense-fg ansi-bold">   1179</span>                 )
+
+<span class="ansi-red-fg">KeyError</span>: &#34;None of [Int64Index([-2, -2, -2, -2, -2, -2, -2, -2, -2, -2,\n            ...\n            -1, -2, -2, -2, -1, -1, -2, -2, -2, -2],\n           dtype=&#39;int64&#39;, length=143)] are in the [columns]&#34;</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+ 
+

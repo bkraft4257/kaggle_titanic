@@ -37,7 +37,10 @@ help:
 	@echo "  changes    to make an overview of all changed/added/deprecated items"
 	@echo "  linkcheck  to check all external links for integrity"
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
-
+	@echo " "
+	@echo "  prsync     to rsync _profilers to _build/html/_profiling"
+	@echo "  gesync     to rsync Great Expections Profile HTML to _build/html/_great_expectations"
+	@echo "  nbsync     to rsync _notebooks to  _build/html/notebooks"
 clean:
 	-rm -rf $(BUILDDIR)/*
 
@@ -151,3 +154,22 @@ doctest:
 	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
+
+prsync:
+	@echo 
+	@echo "Copying profilers."
+	rsync -avzu --progress -h _profiles/ _build/html/_profiles/
+	@echo
+
+gesync:
+	@echo 
+	@echo "Copying Great Expectations Profiler."
+	rsync -avzu --progress -h ../great_expectations/uncommitted/data_docs/local_site _great_expectations/
+	rsync -avzu --progress -h _great_expectations/ _build/html/_great_expectations/
+	@echo
+
+nbsync:
+	@echo 
+	@echo "Copying HTML Notebooks to _build/html/_notebooks."
+	rsync -avzu --progress -h _notebooks/ _build/html/_notebooks
+	@echo

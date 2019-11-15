@@ -1,0 +1,4 @@
+date, model, accuracy, recall, precision, f1, holdout_accuracy
+10/28/19, dummy-
+10/10/19, gender_model, 0.76555, , , , 
+10/21/19, logreg , , , , , 

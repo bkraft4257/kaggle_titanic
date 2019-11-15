@@ -1,0 +1,3545 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data documentation compiled by Great Expectations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+
+    
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <style>
+      body {
+        position: relative;
+      }
+      .container {
+        padding-top: 50px;
+      }
+      .sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        max-height: 90vh;
+        overflow-y: auto;
+        top: 15px;
+      }
+
+      .ge-section {
+        clear:both;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+      }
+
+      .triangle {
+        border: solid #222;
+        border-width: 0 1px 1px 0;
+        display: inline;
+        cursor: pointer;
+        padding: 3px;
+        position: absolute;
+        right: 0;
+        margin-top: 10px;
+
+        transform: rotate(40deg);
+        -webkit-transform: rotate(40deg);
+        transition: .3s transform ease-in-out;
+      }
+
+      .collapsed .triangle{
+        transform: rotate(-140deg);
+        -webkit-transform: rotate(-140deg);
+        transition: .3s transform ease-in-out;
+      }
+
+      .popover {
+        max-width: 100%;
+      }
+
+      .cooltip {
+        display:inline-block;
+        position:relative;
+        text-align:left;
+        cursor:pointer;
+      }
+
+      .cooltip .top {
+        min-width:200px;
+        top:-6px;
+        left:50%;
+        transform:translate(-50%, -100%);
+        padding:10px 20px;
+        color:#FFFFFF;
+        background-color:#222222;
+        font-weight:normal;
+        font-size:13px;
+        border-radius:8px;
+        position:absolute;
+        z-index:99999999 !important;
+        box-sizing:border-box;
+        box-shadow:0 1px 8px rgba(0,0,0,0.5);
+        display:none;
+        }
+
+        .cooltip:hover .top {
+            display:block;
+            z-index:99999999 !important;
+        }
+
+        .cooltip .top i {
+            position:absolute;
+            top:100%;
+            left:50%;
+            margin-left:-12px;
+            width:24px;
+            height:12px;
+            overflow:hidden;
+        }
+
+        .cooltip .top i::after {
+            content:'';
+            position:absolute;
+            width:12px;
+            height:12px;
+            left:50%;
+            transform:translate(-50%,-50%) rotate(45deg);
+            background-color:#222222;
+            box-shadow:0 1px 8px rgba(0,0,0,0.5);
+        }
+
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.3.5/build/vega.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.2.1/build/vega-lite.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.0.0/build/vega-embed.js"></script>
+    <script src="https://kit.fontawesome.com/8217dffd95.js"></script>
+  </head>
+
+  <body
+        data-spy="scroll"
+        data-target="#navigation"
+        data-offset="50"
+    >
+    
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+          <li class="breadcrumb-item"><a href="../../../../../index.html">Home</a></li>
+        
+        
+            <li class="breadcrumb-item">raw</li>
+        
+            <li class="breadcrumb-item">default</li>
+        
+            <li class="breadcrumb-item">test</li>
+        
+        <li class="breadcrumb-item active" aria-current="page">profiling-BasicDatasetProfiler-ProfilingResults</li>
+    </ol>
+</nav>
+
+
+    <div class="container-fluid px-3">
+      <div class="row">
+        <div class="col-2 navbar-collapse">
+          <nav id="navigation" class="navbar navbar-light bg-light sticky d-none d-sm-block">
+    <nav class="nav nav-pills flex-column">
+        <a class="navbar-brand" href="#" style="white-space: normal; word-break: break-all;overflow-wrap: normal; font-size: 1rem; font-weight: 500;">test</a>
+        
+            <a class="nav-link" href="#section-1">Overview</a>
+        
+            <a class="nav-link" href="#section-2">PassengerId</a>
+        
+            <a class="nav-link" href="#section-3">Pclass</a>
+        
+            <a class="nav-link" href="#section-4">Name</a>
+        
+            <a class="nav-link" href="#section-5">Sex</a>
+        
+            <a class="nav-link" href="#section-6">Age</a>
+        
+            <a class="nav-link" href="#section-7">SibSp</a>
+        
+            <a class="nav-link" href="#section-8">Parch</a>
+        
+            <a class="nav-link" href="#section-9">Ticket</a>
+        
+            <a class="nav-link" href="#section-10">Fare</a>
+        
+            <a class="nav-link" href="#section-11">Cabin</a>
+        
+            <a class="nav-link" href="#section-12">Embarked</a>
+        
+    </nav>
+</nav>
+        </div>
+        <div class="col-md-8 col-lg-8 col-xs-12">
+        
+          <div id="section-1" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-1-content-block-1" class="col-12" >
+
+    <div id="section-1-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        Overview
+    </h3></div>
+
+</div>
+        
+
+<div id="section-1-content-block-2" class="col-6" style="margin-top:20px;" >
+
+    <div id="section-1-content-block-2-header" >
+        
+        <h4>
+            Dataset info
+        </h4>
+        </div>
+
+
+<table id="section-1-content-block-2-body" class="table table-sm" >
+    
+
+    <tr>
+        <td id="section-1-content-block-2-cell-1-1" ><span>Number of variables</span></td><td id="section-1-content-block-2-cell-1-2" >11</td></tr><tr>
+        <td id="section-1-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Number of observations
+                    <span class=top>
+                        expect_table_row_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-1-content-block-2-cell-2-2" >418</td></tr><tr>
+        <td id="section-1-content-block-2-cell-3-1" ><span>Missing cells</span></td><td id="section-1-content-block-2-cell-3-2" ><span>9.00%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-1-content-block-3" class="col-6 table-responsive" style="margin-top:20px;" >
+
+    <div id="section-1-content-block-3-header" >
+        
+        <h4>
+            Variable types
+        </h4>
+        </div>
+
+
+<table id="section-1-content-block-3-body" class="table table-sm" >
+    
+
+    <tr>
+        <td id="section-1-content-block-3-cell-1-1" ><span>int</span></td><td id="section-1-content-block-3-cell-1-2" ><span>4</span></td></tr><tr>
+        <td id="section-1-content-block-3-cell-2-1" ><span>float</span></td><td id="section-1-content-block-3-cell-2-2" ><span>2</span></td></tr><tr>
+        <td id="section-1-content-block-3-cell-3-1" ><span>string</span></td><td id="section-1-content-block-3-cell-3-2" ><span>5</span></td></tr><tr>
+        <td id="section-1-content-block-3-cell-4-1" ><span>unknown</span></td><td id="section-1-content-block-3-cell-4-2" ><span>0</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-1-content-block-4" class="col-12" style="margin-top:20px;" >
+
+    <div id="section-1-content-block-4-header" class="collapsed" data-toggle="collapse" href="#section-1-content-block-4-body" aria-expanded="true" aria-controls="collapseExample" style="cursor:pointer;" >
+        
+        <h4>
+            Expectation types <span class="mr-3 triangle"></span>
+        </h4>
+        </div>
+
+
+<ul id="section-1-content-block-4-body" class="list-group collapse" >
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_values_to_be_in_type_list <span class="badge badge-secondary badge-pill" >11</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_unique_value_count_to_be_between <span class="badge badge-secondary badge-pill" >11</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_proportion_of_unique_values_to_be_between <span class="badge badge-secondary badge-pill" >11</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_values_to_not_be_null <span class="badge badge-secondary badge-pill" >11</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_values_to_be_in_set <span class="badge badge-secondary badge-pill" >11</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_distinct_values_to_be_in_set <span class="badge badge-secondary badge-pill" >5</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_values_to_not_match_regex <span class="badge badge-secondary badge-pill" >5</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_values_to_be_unique <span class="badge badge-secondary badge-pill" >2</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_min_to_be_between <span class="badge badge-secondary badge-pill" >2</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_max_to_be_between <span class="badge badge-secondary badge-pill" >2</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_mean_to_be_between <span class="badge badge-secondary badge-pill" >2</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_median_to_be_between <span class="badge badge-secondary badge-pill" >2</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_quantile_values_to_be_between <span class="badge badge-secondary badge-pill" >2</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_column_kl_divergence_to_be_less_than <span class="badge badge-secondary badge-pill" >2</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_table_row_count_to_be_between <span class="badge badge-secondary badge-pill" >1</span>
+                </span>
+            </li>
+    
+            
+        
+        <li >
+                <span class="list-group-item d-flex justify-content-between align-items-center" >
+                    expect_table_columns_to_match_ordered_list <span class="badge badge-secondary badge-pill" >1</span>
+                </span>
+            </li>
+    
+</ul>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-2" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-2-content-block-1" class="col-12" >
+
+    <div id="section-2-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    PassengerId
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-2-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: int
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-2-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-2-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-2-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-2-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-2-content-block-2-cell-1-2" >418</td></tr><tr>
+        <td id="section-2-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-2-content-block-2-cell-2-2" ><span>100.0%</span></td></tr><tr>
+        <td id="section-2-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-2-content-block-2-cell-3-2" >0</td></tr><tr>
+        <td id="section-2-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-2-content-block-2-cell-4-2" ><span>0.0%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-2-content-block-3" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-2-content-block-3-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-2-content-block-3-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >892</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >893</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >894</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >895</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >896</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >897</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >898</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >899</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >900</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >901</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >902</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >903</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >904</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >905</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >906</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >907</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >908</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >909</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >910</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >911</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-3" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-3-content-block-1" class="col-12" >
+
+    <div id="section-3-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    Pclass
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-3-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: int
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-3-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-3-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-3-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-3-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-3-content-block-2-cell-1-2" >3</td></tr><tr>
+        <td id="section-3-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-3-content-block-2-cell-2-2" ><span>0.7%</span></td></tr><tr>
+        <td id="section-3-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-3-content-block-2-cell-3-2" >0</td></tr><tr>
+        <td id="section-3-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-3-content-block-2-cell-4-2" ><span>0.0%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-3-content-block-3" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-3-content-block-3-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-3-content-block-3-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >3</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >1</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >2</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+
+<div id="section-3-content-block-4" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-3-content-block-4-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Value Counts
+                    <span class=top>
+                        expect_column_distinct_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+<div id="section-3-content-block-4-graph" ></div>
+<script>
+    // Assign the specification to a local variable vlSpec.
+    vlSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.4.0.json",
+  "autosize": "fit",
+  "config": {
+    "mark": {
+      "tooltip": null
+    },
+    "view": {
+      "height": 300,
+      "width": 400
+    }
+  },
+  "data": {
+    "name": "data-2925dfa38fb750093ab0c802aed295ea"
+  },
+  "datasets": {
+    "data-2925dfa38fb750093ab0c802aed295ea": [
+      {
+        "count": 107,
+        "value": 1
+      },
+      {
+        "count": 93,
+        "value": 2
+      },
+      {
+        "count": 218,
+        "value": 3
+      }
+    ]
+  },
+  "encoding": {
+    "x": {
+      "field": "value",
+      "type": "ordinal"
+    },
+    "y": {
+      "field": "count",
+      "type": "quantitative"
+    }
+  },
+  "height": 200,
+  "mark": {
+    "size": 20,
+    "type": "bar"
+  },
+  "width": 200
+};
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#section-3-content-block-4-graph', vlSpec, {
+        actions: false
+    }).then(result=>console.log(result)).catch(console.warn);
+</script>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-4" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-4-content-block-1" class="col-12" >
+
+    <div id="section-4-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    Name
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-4-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: string
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-4-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-4-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-4-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-4-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-4-content-block-2-cell-1-2" >418</td></tr><tr>
+        <td id="section-4-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-4-content-block-2-cell-2-2" ><span>100.0%</span></td></tr><tr>
+        <td id="section-4-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-4-content-block-2-cell-3-2" >0</td></tr><tr>
+        <td id="section-4-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-4-content-block-2-cell-4-2" ><span>0.0%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-4-content-block-3" class="col-12" style="margin-top:20px;" >
+
+    <div id="section-4-content-block-3-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-4-content-block-3-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Abrahim, Mrs. Joseph (Sophie Halaut Easu)</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Assaf Khalil, Mrs. Mariana (Miriam")"</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Assaf, Mr. Gerios</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Caldwell, Mr. Albert Francis</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Chaffee, Mrs. Herbert Fuller (Carrie Constance Toogood)</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Connolly, Miss. Kate</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Davies, Mr. John Samuel</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Hirvonen, Mrs. Alexander (Helga E Lindqvist)</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Howard, Mr. Benjamin</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Ilieff, Mr. Ylio</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Ilmakangas, Miss. Ida Livija</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Jones, Mr. Charles Cresson</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Keane, Mr. Daniel</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Kelly, Mr. James</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Myles, Mr. Thomas Francis</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Snyder, Mrs. John Pillsbury (Nelle Stevenson)</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Svensson, Mr. Johan Cervin</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Wilkes, Mrs. James (Ellen Needs)</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Wirz, Mr. Albert</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >del Carlo, Mrs. Sebastiano (Argenia Genovesi)</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-5" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-5-content-block-1" class="col-12" >
+
+    <div id="section-5-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    Sex
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-5-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: string
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-5-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-5-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-5-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-5-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-5-content-block-2-cell-1-2" >2</td></tr><tr>
+        <td id="section-5-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-5-content-block-2-cell-2-2" ><span>0.5%</span></td></tr><tr>
+        <td id="section-5-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-5-content-block-2-cell-3-2" >0</td></tr><tr>
+        <td id="section-5-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-5-content-block-2-cell-4-2" ><span>0.0%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-5-content-block-3" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-5-content-block-3-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-5-content-block-3-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >male</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >female</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+
+<div id="section-5-content-block-4" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-5-content-block-4-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Value Counts
+                    <span class=top>
+                        expect_column_distinct_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+<div id="section-5-content-block-4-graph" ></div>
+<script>
+    // Assign the specification to a local variable vlSpec.
+    vlSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.4.0.json",
+  "autosize": "fit",
+  "config": {
+    "mark": {
+      "tooltip": null
+    },
+    "view": {
+      "height": 300,
+      "width": 400
+    }
+  },
+  "data": {
+    "name": "data-b059a012e4be68f9ec99af5eff97f110"
+  },
+  "datasets": {
+    "data-b059a012e4be68f9ec99af5eff97f110": [
+      {
+        "count": 152,
+        "value": "female"
+      },
+      {
+        "count": 266,
+        "value": "male"
+      }
+    ]
+  },
+  "encoding": {
+    "x": {
+      "field": "value",
+      "type": "ordinal"
+    },
+    "y": {
+      "field": "count",
+      "type": "quantitative"
+    }
+  },
+  "height": 200,
+  "mark": {
+    "size": 20,
+    "type": "bar"
+  },
+  "width": 200
+};
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#section-5-content-block-4-graph', vlSpec, {
+        actions: false
+    }).then(result=>console.log(result)).catch(console.warn);
+</script>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-6" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-6-content-block-1" class="col-12" >
+
+    <div id="section-6-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    Age
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-6-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: float
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-6-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-6-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-6-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-6-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-2-cell-1-2" >79</td></tr><tr>
+        <td id="section-6-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-2-cell-2-2" ><span>23.8%</span></td></tr><tr>
+        <td id="section-6-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-2-cell-3-2" >86</td></tr><tr>
+        <td id="section-6-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-2-cell-4-2" ><span>20.6%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-6-content-block-3" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-6-content-block-3-header" >
+        
+        <h4>
+            Quantiles
+        </h4>
+        </div>
+
+
+<table id="section-6-content-block-3-body" class="table table-sm table-unbordered" >
+    
+
+    <tr>
+        <td id="section-6-content-block-3-cell-1-1" >
+                <span class="cooltip" >
+                    0.05
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-3-cell-1-2" >8.0</td></tr><tr>
+        <td id="section-6-content-block-3-cell-2-1" >
+                <span class="cooltip" >
+                    Q1
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-3-cell-2-2" >21.0</td></tr><tr>
+        <td id="section-6-content-block-3-cell-3-1" >
+                <span class="cooltip" >
+                    Median
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between 
+ expect_column_median_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-3-cell-3-2" >27.0</td></tr><tr>
+        <td id="section-6-content-block-3-cell-4-1" >
+                <span class="cooltip" >
+                    Q3
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-3-cell-4-2" >39.0</td></tr><tr>
+        <td id="section-6-content-block-3-cell-5-1" >
+                <span class="cooltip" >
+                    0.95
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-3-cell-5-2" >57.0</td></tr></table>
+
+</div>
+        
+
+<div id="section-6-content-block-4" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-6-content-block-4-header" >
+        
+        <h4>
+            Statistics
+        </h4>
+        </div>
+
+
+<table id="section-6-content-block-4-body" class="table table-sm table-unbordered" >
+    
+
+    <tr>
+        <td id="section-6-content-block-4-cell-1-1" >
+                <span class="cooltip" >
+                    Mean
+                    <span class=top>
+                        expect_column_mean_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-4-cell-1-2" ><span>30.27</span></td></tr><tr>
+        <td id="section-6-content-block-4-cell-2-1" >
+                <span class="cooltip" >
+                    Minimum
+                    <span class=top>
+                        expect_column_min_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-4-cell-2-2" ><span>0.17</span></td></tr><tr>
+        <td id="section-6-content-block-4-cell-3-1" >
+                <span class="cooltip" >
+                    Maximum
+                    <span class=top>
+                        expect_column_max_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-6-content-block-4-cell-3-2" ><span>76.00</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-6-content-block-5" class="col-6" style="margin-top:20px;" >
+
+    <div id="section-6-content-block-5-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Histogram
+                    <span class=top>
+                        expect_column_kl_divergence_to_be_less_than
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+<div id="section-6-content-block-5-graph" ></div>
+<script>
+    // Assign the specification to a local variable vlSpec.
+    vlSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.4.0.json",
+  "autosize": "fit",
+  "config": {
+    "mark": {
+      "tooltip": null
+    },
+    "view": {
+      "height": 300,
+      "width": 400
+    }
+  },
+  "data": {
+    "name": "data-5d9993dee198d5dae8193910b25fa236"
+  },
+  "datasets": {
+    "data-5d9993dee198d5dae8193910b25fa236": [
+      {
+        "bin_max": 5.2,
+        "bin_min": 0.2,
+        "weights": 3.614457831325301
+      },
+      {
+        "bin_max": 10.3,
+        "bin_min": 5.2,
+        "weights": 3.0120481927710845
+      },
+      {
+        "bin_max": 15.3,
+        "bin_min": 10.3,
+        "weights": 3.0120481927710845
+      },
+      {
+        "bin_max": 20.4,
+        "bin_min": 15.3,
+        "weights": 11.144578313253012
+      },
+      {
+        "bin_max": 25.4,
+        "bin_min": 20.4,
+        "weights": 21.987951807228914
+      },
+      {
+        "bin_max": 30.5,
+        "bin_min": 25.4,
+        "weights": 17.46987951807229
+      },
+      {
+        "bin_max": 35.6,
+        "bin_min": 30.5,
+        "weights": 8.132530120481928
+      },
+      {
+        "bin_max": 40.6,
+        "bin_min": 35.6,
+        "weights": 8.734939759036145
+      },
+      {
+        "bin_max": 45.7,
+        "bin_min": 40.6,
+        "weights": 7.228915662650602
+      },
+      {
+        "bin_max": 50.7,
+        "bin_min": 45.7,
+        "weights": 6.325301204819277
+      },
+      {
+        "bin_max": 55.8,
+        "bin_min": 50.7,
+        "weights": 3.614457831325301
+      },
+      {
+        "bin_max": 60.8,
+        "bin_min": 55.8,
+        "weights": 2.710843373493976
+      },
+      {
+        "bin_max": 65.9,
+        "bin_min": 60.8,
+        "weights": 2.4096385542168677
+      },
+      {
+        "bin_max": 70.9,
+        "bin_min": 65.9,
+        "weights": 0.30120481927710846
+      },
+      {
+        "bin_max": 76.0,
+        "bin_min": 70.9,
+        "weights": 0.30120481927710846
+      }
+    ]
+  },
+  "encoding": {
+    "x": {
+      "field": "bin_min",
+      "type": "ordinal"
+    },
+    "x2": {
+      "field": "bin_max"
+    },
+    "y": {
+      "field": "weights",
+      "type": "quantitative"
+    }
+  },
+  "height": 300,
+  "mark": "bar",
+  "width": 300
+};
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#section-6-content-block-5-graph', vlSpec, {
+        actions: false
+    }).then(result=>console.log(result)).catch(console.warn);
+</script>
+
+</div>
+        
+
+<div id="section-6-content-block-6" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-6-content-block-6-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-6-content-block-6-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >21.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >24.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >22.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >30.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >18.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >26.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >27.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >23.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >25.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >29.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >36.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >45.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >20.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >17.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >28.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >31.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >32.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >33.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >39.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >55.0</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-7" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-7-content-block-1" class="col-12" >
+
+    <div id="section-7-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    SibSp
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-7-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: int
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-7-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-7-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-7-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-7-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-7-content-block-2-cell-1-2" >7</td></tr><tr>
+        <td id="section-7-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-7-content-block-2-cell-2-2" ><span>1.7%</span></td></tr><tr>
+        <td id="section-7-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-7-content-block-2-cell-3-2" >0</td></tr><tr>
+        <td id="section-7-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-7-content-block-2-cell-4-2" ><span>0.0%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-7-content-block-3" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-7-content-block-3-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-7-content-block-3-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >1</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >2</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >3</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >4</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >8</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >5</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+
+<div id="section-7-content-block-4" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-7-content-block-4-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Value Counts
+                    <span class=top>
+                        expect_column_distinct_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+<div id="section-7-content-block-4-graph" ></div>
+<script>
+    // Assign the specification to a local variable vlSpec.
+    vlSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.4.0.json",
+  "autosize": "fit",
+  "config": {
+    "mark": {
+      "tooltip": null
+    },
+    "view": {
+      "height": 300,
+      "width": 400
+    }
+  },
+  "data": {
+    "name": "data-d64e5c7a916de05ca05561b7ef02d022"
+  },
+  "datasets": {
+    "data-d64e5c7a916de05ca05561b7ef02d022": [
+      {
+        "count": 283,
+        "value": 0
+      },
+      {
+        "count": 110,
+        "value": 1
+      },
+      {
+        "count": 14,
+        "value": 2
+      },
+      {
+        "count": 4,
+        "value": 3
+      },
+      {
+        "count": 4,
+        "value": 4
+      },
+      {
+        "count": 1,
+        "value": 5
+      },
+      {
+        "count": 2,
+        "value": 8
+      }
+    ]
+  },
+  "encoding": {
+    "x": {
+      "field": "value",
+      "type": "ordinal"
+    },
+    "y": {
+      "field": "count",
+      "type": "quantitative"
+    }
+  },
+  "height": 200,
+  "mark": {
+    "size": 20,
+    "type": "bar"
+  },
+  "width": 200
+};
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#section-7-content-block-4-graph', vlSpec, {
+        actions: false
+    }).then(result=>console.log(result)).catch(console.warn);
+</script>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-8" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-8-content-block-1" class="col-12" >
+
+    <div id="section-8-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    Parch
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-8-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: int
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-8-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-8-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-8-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-8-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-8-content-block-2-cell-1-2" >8</td></tr><tr>
+        <td id="section-8-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-8-content-block-2-cell-2-2" ><span>1.9%</span></td></tr><tr>
+        <td id="section-8-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-8-content-block-2-cell-3-2" >0</td></tr><tr>
+        <td id="section-8-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-8-content-block-2-cell-4-2" ><span>0.0%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-8-content-block-3" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-8-content-block-3-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-8-content-block-3-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >1</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >2</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >3</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >4</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >9</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >5</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >6</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+
+<div id="section-8-content-block-4" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-8-content-block-4-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Value Counts
+                    <span class=top>
+                        expect_column_distinct_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+<div id="section-8-content-block-4-graph" ></div>
+<script>
+    // Assign the specification to a local variable vlSpec.
+    vlSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.4.0.json",
+  "autosize": "fit",
+  "config": {
+    "mark": {
+      "tooltip": null
+    },
+    "view": {
+      "height": 300,
+      "width": 400
+    }
+  },
+  "data": {
+    "name": "data-54acf2452180778c296ce4e3926968fc"
+  },
+  "datasets": {
+    "data-54acf2452180778c296ce4e3926968fc": [
+      {
+        "count": 324,
+        "value": 0
+      },
+      {
+        "count": 52,
+        "value": 1
+      },
+      {
+        "count": 33,
+        "value": 2
+      },
+      {
+        "count": 3,
+        "value": 3
+      },
+      {
+        "count": 2,
+        "value": 4
+      },
+      {
+        "count": 1,
+        "value": 5
+      },
+      {
+        "count": 1,
+        "value": 6
+      },
+      {
+        "count": 2,
+        "value": 9
+      }
+    ]
+  },
+  "encoding": {
+    "x": {
+      "field": "value",
+      "type": "ordinal"
+    },
+    "y": {
+      "field": "count",
+      "type": "quantitative"
+    }
+  },
+  "height": 200,
+  "mark": {
+    "size": 20,
+    "type": "bar"
+  },
+  "width": 200
+};
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#section-8-content-block-4-graph', vlSpec, {
+        actions: false
+    }).then(result=>console.log(result)).catch(console.warn);
+</script>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-9" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-9-content-block-1" class="col-12" >
+
+    <div id="section-9-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    Ticket
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-9-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: string
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-9-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-9-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-9-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-9-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-9-content-block-2-cell-1-2" >363</td></tr><tr>
+        <td id="section-9-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-9-content-block-2-cell-2-2" ><span>86.8%</span></td></tr><tr>
+        <td id="section-9-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-9-content-block-2-cell-3-2" >0</td></tr><tr>
+        <td id="section-9-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-9-content-block-2-cell-4-2" ><span>0.0%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-9-content-block-3" class="col-12" style="margin-top:20px;" >
+
+    <div id="section-9-content-block-3-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-9-content-block-3-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >PC 17608</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >113503</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >CA. 2343</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >16966</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >220845</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >347077</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C.A. 31029</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >PC 17483</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >SOTON/O.Q. 3101315</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >13236</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >13695</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >19950</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >21228</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >24065</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >2660</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >2662</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >29103</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C.A. 2315</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >F.C.C. 13534</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >W./C. 6607</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-10" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-10-content-block-1" class="col-12" >
+
+    <div id="section-10-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    Fare
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-10-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: float
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-10-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-10-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-10-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-10-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-2-cell-1-2" >169</td></tr><tr>
+        <td id="section-10-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-2-cell-2-2" ><span>40.5%</span></td></tr><tr>
+        <td id="section-10-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-2-cell-3-2" >1</td></tr><tr>
+        <td id="section-10-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-2-cell-4-2" ><span>0.2%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-10-content-block-3" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-10-content-block-3-header" >
+        
+        <h4>
+            Quantiles
+        </h4>
+        </div>
+
+
+<table id="section-10-content-block-3-body" class="table table-sm table-unbordered" >
+    
+
+    <tr>
+        <td id="section-10-content-block-3-cell-1-1" >
+                <span class="cooltip" >
+                    0.05
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-3-cell-1-2" >7.2292</td></tr><tr>
+        <td id="section-10-content-block-3-cell-2-1" >
+                <span class="cooltip" >
+                    Q1
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-3-cell-2-2" >7.8958</td></tr><tr>
+        <td id="section-10-content-block-3-cell-3-1" >
+                <span class="cooltip" >
+                    Median
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between 
+ expect_column_median_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-3-cell-3-2" >14.4542</td></tr><tr>
+        <td id="section-10-content-block-3-cell-4-1" >
+                <span class="cooltip" >
+                    Q3
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-3-cell-4-2" >31.5</td></tr><tr>
+        <td id="section-10-content-block-3-cell-5-1" >
+                <span class="cooltip" >
+                    0.95
+                    <span class=top>
+                        expect_column_quantile_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-3-cell-5-2" >151.55</td></tr></table>
+
+</div>
+        
+
+<div id="section-10-content-block-4" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-10-content-block-4-header" >
+        
+        <h4>
+            Statistics
+        </h4>
+        </div>
+
+
+<table id="section-10-content-block-4-body" class="table table-sm table-unbordered" >
+    
+
+    <tr>
+        <td id="section-10-content-block-4-cell-1-1" >
+                <span class="cooltip" >
+                    Mean
+                    <span class=top>
+                        expect_column_mean_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-4-cell-1-2" ><span>35.63</span></td></tr><tr>
+        <td id="section-10-content-block-4-cell-2-1" >
+                <span class="cooltip" >
+                    Minimum
+                    <span class=top>
+                        expect_column_min_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-4-cell-2-2" ><span>0.00</span></td></tr><tr>
+        <td id="section-10-content-block-4-cell-3-1" >
+                <span class="cooltip" >
+                    Maximum
+                    <span class=top>
+                        expect_column_max_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-10-content-block-4-cell-3-2" ><span>512.33</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-10-content-block-5" class="col-6" style="margin-top:20px;" >
+
+    <div id="section-10-content-block-5-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Histogram
+                    <span class=top>
+                        expect_column_kl_divergence_to_be_less_than
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+<div id="section-10-content-block-5-graph" ></div>
+<script>
+    // Assign the specification to a local variable vlSpec.
+    vlSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.4.0.json",
+  "autosize": "fit",
+  "config": {
+    "mark": {
+      "tooltip": null
+    },
+    "view": {
+      "height": 300,
+      "width": 400
+    }
+  },
+  "data": {
+    "name": "data-e0b8d41c53ae80bb25c2402bba5c1442"
+  },
+  "datasets": {
+    "data-e0b8d41c53ae80bb25c2402bba5c1442": [
+      {
+        "bin_max": 6.2,
+        "bin_min": 0.0,
+        "weights": 0.7194244604316548
+      },
+      {
+        "bin_max": 12.5,
+        "bin_min": 6.2,
+        "weights": 41.007194244604314
+      },
+      {
+        "bin_max": 18.7,
+        "bin_min": 12.5,
+        "weights": 15.107913669064748
+      },
+      {
+        "bin_max": 25.0,
+        "bin_min": 18.7,
+        "weights": 6.474820143884892
+      },
+      {
+        "bin_max": 31.2,
+        "bin_min": 25.0,
+        "weights": 10.79136690647482
+      },
+      {
+        "bin_max": 37.5,
+        "bin_min": 31.2,
+        "weights": 3.357314148681055
+      },
+      {
+        "bin_max": 43.7,
+        "bin_min": 37.5,
+        "weights": 2.158273381294964
+      },
+      {
+        "bin_max": 50.0,
+        "bin_min": 43.7,
+        "weights": 0.9592326139088728
+      },
+      {
+        "bin_max": 56.2,
+        "bin_min": 50.0,
+        "weights": 2.6378896882494005
+      },
+      {
+        "bin_max": 62.5,
+        "bin_min": 56.2,
+        "weights": 2.6378896882494005
+      },
+      {
+        "bin_max": 68.7,
+        "bin_min": 62.5,
+        "weights": 0.9592326139088728
+      },
+      {
+        "bin_max": 75.0,
+        "bin_min": 68.7,
+        "weights": 1.6786570743405276
+      },
+      {
+        "bin_max": 81.2,
+        "bin_min": 75.0,
+        "weights": 1.6786570743405276
+      },
+      {
+        "bin_max": 87.5,
+        "bin_min": 81.2,
+        "weights": 1.6786570743405276
+      },
+      {
+        "bin_max": 93.7,
+        "bin_min": 87.5,
+        "weights": 0.7194244604316548
+      },
+      {
+        "bin_max": 100.0,
+        "bin_min": 93.7,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 106.2,
+        "bin_min": 100.0,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 112.5,
+        "bin_min": 106.2,
+        "weights": 0.4796163069544364
+      },
+      {
+        "bin_max": 118.7,
+        "bin_min": 112.5,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 125.0,
+        "bin_min": 118.7,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 131.2,
+        "bin_min": 125.0,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 137.5,
+        "bin_min": 131.2,
+        "weights": 1.4388489208633095
+      },
+      {
+        "bin_max": 143.7,
+        "bin_min": 137.5,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 150.0,
+        "bin_min": 143.7,
+        "weights": 0.2398081534772182
+      },
+      {
+        "bin_max": 156.2,
+        "bin_min": 150.0,
+        "weights": 0.4796163069544364
+      },
+      {
+        "bin_max": 162.4,
+        "bin_min": 156.2,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 168.7,
+        "bin_min": 162.4,
+        "weights": 0.4796163069544364
+      },
+      {
+        "bin_max": 174.9,
+        "bin_min": 168.7,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 181.2,
+        "bin_min": 174.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 187.4,
+        "bin_min": 181.2,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 193.7,
+        "bin_min": 187.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 199.9,
+        "bin_min": 193.7,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 206.2,
+        "bin_min": 199.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 212.4,
+        "bin_min": 206.2,
+        "weights": 1.1990407673860912
+      },
+      {
+        "bin_max": 218.7,
+        "bin_min": 212.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 224.9,
+        "bin_min": 218.7,
+        "weights": 0.7194244604316548
+      },
+      {
+        "bin_max": 231.2,
+        "bin_min": 224.9,
+        "weights": 0.2398081534772182
+      },
+      {
+        "bin_max": 237.4,
+        "bin_min": 231.2,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 243.7,
+        "bin_min": 237.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 249.9,
+        "bin_min": 243.7,
+        "weights": 0.2398081534772182
+      },
+      {
+        "bin_max": 256.2,
+        "bin_min": 249.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 262.4,
+        "bin_min": 256.2,
+        "weights": 1.1990407673860912
+      },
+      {
+        "bin_max": 268.7,
+        "bin_min": 262.4,
+        "weights": 0.4796163069544364
+      },
+      {
+        "bin_max": 274.9,
+        "bin_min": 268.7,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 281.2,
+        "bin_min": 274.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 287.4,
+        "bin_min": 281.2,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 293.7,
+        "bin_min": 287.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 299.9,
+        "bin_min": 293.7,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 306.1,
+        "bin_min": 299.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 312.4,
+        "bin_min": 306.1,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 318.6,
+        "bin_min": 312.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 324.9,
+        "bin_min": 318.6,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 331.1,
+        "bin_min": 324.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 337.4,
+        "bin_min": 331.1,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 343.6,
+        "bin_min": 337.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 349.9,
+        "bin_min": 343.6,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 356.1,
+        "bin_min": 349.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 362.4,
+        "bin_min": 356.1,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 368.6,
+        "bin_min": 362.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 374.9,
+        "bin_min": 368.6,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 381.1,
+        "bin_min": 374.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 387.4,
+        "bin_min": 381.1,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 393.6,
+        "bin_min": 387.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 399.9,
+        "bin_min": 393.6,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 406.1,
+        "bin_min": 399.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 412.4,
+        "bin_min": 406.1,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 418.6,
+        "bin_min": 412.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 424.9,
+        "bin_min": 418.6,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 431.1,
+        "bin_min": 424.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 437.4,
+        "bin_min": 431.1,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 443.6,
+        "bin_min": 437.4,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 449.9,
+        "bin_min": 443.6,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 456.1,
+        "bin_min": 449.9,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 462.3,
+        "bin_min": 456.1,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 468.6,
+        "bin_min": 462.3,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 474.8,
+        "bin_min": 468.6,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 481.1,
+        "bin_min": 474.8,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 487.3,
+        "bin_min": 481.1,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 493.6,
+        "bin_min": 487.3,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 499.8,
+        "bin_min": 493.6,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 506.1,
+        "bin_min": 499.8,
+        "weights": 0.0
+      },
+      {
+        "bin_max": 512.3,
+        "bin_min": 506.1,
+        "weights": 0.2398081534772182
+      }
+    ]
+  },
+  "encoding": {
+    "x": {
+      "field": "bin_min",
+      "type": "ordinal"
+    },
+    "x2": {
+      "field": "bin_max"
+    },
+    "y": {
+      "field": "weights",
+      "type": "quantitative"
+    }
+  },
+  "height": 300,
+  "mark": "bar",
+  "width": 300
+};
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#section-10-content-block-5-graph', vlSpec, {
+        actions: false
+    }).then(result=>console.log(result)).catch(console.warn);
+</script>
+
+</div>
+        
+
+<div id="section-10-content-block-6" class="col-12" style="margin-top:20px;" >
+
+    <div id="section-10-content-block-6-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-10-content-block-6-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >7.75</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >26.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >8.05</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >13.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >7.8958</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >10.5</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >7.775</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >7.225</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >7.2292</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >7.8542</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >8.6625</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >21.0</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >26.55</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >7.8792</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >27.7208</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >7.25</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >7.925</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >262.375</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >14.5</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >211.5</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-11" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-11-content-block-1" class="col-12" >
+
+    <div id="section-11-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    Cabin
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-11-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: string
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-11-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-11-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-11-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-11-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-11-content-block-2-cell-1-2" >76</td></tr><tr>
+        <td id="section-11-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-11-content-block-2-cell-2-2" ><span>83.5%</span></td></tr><tr>
+        <td id="section-11-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-11-content-block-2-cell-3-2" >327</td></tr><tr>
+        <td id="section-11-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-11-content-block-2-cell-4-2" ><span>78.2%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-11-content-block-3" class="col-12" style="margin-top:20px;" >
+
+    <div id="section-11-content-block-3-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-11-content-block-3-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >B57 B59 B63 B66</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >A34</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >B45</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C101</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C116</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C23 C25 C27</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C31</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C55 C57</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C6</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C78</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C80</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C89</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >E34</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >F4</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >A21</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >A9</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >B36</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >D19</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >D34</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >E31</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+    </div>
+</div>
+        
+          <div id="section-12" class="ge-section container-fluid">
+    <div class="row">
+        
+
+<div id="section-12-content-block-1" class="col-12" >
+
+    <div id="section-12-content-block-1-header" class="alert alert-secondary" >
+    <h3>
+        
+                <span class="cooltip" >
+                    Embarked
+                    <span class=top>
+                        expect_column_to_exist
+                    </span>
+                </span>
+            
+    </h3><h5 id="section-12-content-block-1-subheader" >
+        
+                <span class="cooltip" >
+                    Type: string
+                    <span class=top>
+                        expect_column_values_to_be_of_type <br>expect_column_values_to_be_in_type_list
+                    </span>
+                </span>
+            
+    </h5>
+    </div>
+
+</div>
+        
+
+<div id="section-12-content-block-2" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-12-content-block-2-header" >
+        
+        <h4>
+            Properties
+        </h4>
+        </div>
+
+
+<table id="section-12-content-block-2-body" class="table table-sm table-unbordered" style="width:100%;" >
+    
+
+    <tr>
+        <td id="section-12-content-block-2-cell-1-1" >
+                <span class="cooltip" >
+                    Distinct (n)
+                    <span class=top>
+                        expect_column_unique_value_count_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-12-content-block-2-cell-1-2" >3</td></tr><tr>
+        <td id="section-12-content-block-2-cell-2-1" >
+                <span class="cooltip" >
+                    Distinct (%)
+                    <span class=top>
+                        expect_column_proportion_of_unique_values_to_be_between
+                    </span>
+                </span>
+            </td><td id="section-12-content-block-2-cell-2-2" ><span>0.7%</span></td></tr><tr>
+        <td id="section-12-content-block-2-cell-3-1" >
+                <span class="cooltip" >
+                    Missing (n)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-12-content-block-2-cell-3-2" >0</td></tr><tr>
+        <td id="section-12-content-block-2-cell-4-1" >
+                <span class="cooltip" >
+                    Missing (%)
+                    <span class=top>
+                        expect_column_values_to_not_be_null
+                    </span>
+                </span>
+            </td><td id="section-12-content-block-2-cell-4-2" ><span>0.0%</span></td></tr></table>
+
+</div>
+        
+
+<div id="section-12-content-block-3" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-12-content-block-3-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Example Values
+                    <span class=top>
+                        expect_column_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+
+
+<p id="section-12-content-block-3-body" >
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >S</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >C</span>
+                </span>
+            
+    
+                <span >
+                    <span class="badge badge-info" style="word-break:break-all;" >Q</span>
+                </span>
+            
+    </p>
+
+</div>
+        
+
+<div id="section-12-content-block-4" class="col-4" style="margin-top:20px;" >
+
+    <div id="section-12-content-block-4-header" >
+        
+        <h4>
+            
+                <span class="cooltip" >
+                    Value Counts
+                    <span class=top>
+                        expect_column_distinct_values_to_be_in_set
+                    </span>
+                </span>
+            
+        </h4>
+        </div>
+<div id="section-12-content-block-4-graph" ></div>
+<script>
+    // Assign the specification to a local variable vlSpec.
+    vlSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.4.0.json",
+  "autosize": "fit",
+  "config": {
+    "mark": {
+      "tooltip": null
+    },
+    "view": {
+      "height": 300,
+      "width": 400
+    }
+  },
+  "data": {
+    "name": "data-b616670597bdf97bb9c6cb5b84e875c8"
+  },
+  "datasets": {
+    "data-b616670597bdf97bb9c6cb5b84e875c8": [
+      {
+        "count": 102,
+        "value": "C"
+      },
+      {
+        "count": 46,
+        "value": "Q"
+      },
+      {
+        "count": 270,
+        "value": "S"
+      }
+    ]
+  },
+  "encoding": {
+    "x": {
+      "field": "value",
+      "type": "ordinal"
+    },
+    "y": {
+      "field": "count",
+      "type": "quantitative"
+    }
+  },
+  "height": 200,
+  "mark": {
+    "size": 20,
+    "type": "bar"
+  },
+  "width": 200
+};
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#section-12-content-block-4-graph', vlSpec, {
+        actions: false
+    }).then(result=>console.log(result)).catch(console.warn);
+</script>
+
+</div>
+        
+    </div>
+</div>
+        
+        </div>
+        <div class="col-lg-2 col-md-2 col-xs-12 d-none d-md-block">
+              <div style="">
+    <div class="col-12">
+      <div class="row">
+        <img                src="https://great-expectations.readthedocs.io/en/latest/_images/generic_dickens_protagonist.png"
+          style="
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+          ">
+      </div>
+    </div>
+    <div class="col-12">
+      <p>
+        Documentation autogenerated using
+        <a href="https://greatexpectations.io">Great Expectations</a>.
+      </p>
+    </div>
+    <div class="alert alert-danger col-12" role="alert">
+        This is a beta feature! Expect changes in API, behavior, and design.
+    </div>
+  </div>
+  </div>
+        </div>
+        <div class="d-block d-sm-none col-12">
+            <div>
+              <div class="row">
+                <img
+                  src="https://great-expectations.readthedocs.io/en/latest/_images/generic_dickens_protagonist.png"
+                  style="
+                    width: 200px;
+                    margin-left: auto;
+                    margin-right: auto;
+                  ">
+              </div>
+            </div>
+            <div class="col-12">
+              <p>
+                Documentation autogenerated using
+                <a href="https://greatexpectations.io">Great Expectations</a>.
+              </p>
+            </div>
+            <div class="alert alert-danger col-12" role="alert">
+                This is a beta feature! Expect changes in API, behavior, and design.
+            </div>
+          </div>
+
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        $(window).on('activate.bs.scrollspy', function () {
+          document.querySelector(".nav-link.active").scrollIntoViewIfNeeded();
+        });
+    </script>
+  </body>
+</html>

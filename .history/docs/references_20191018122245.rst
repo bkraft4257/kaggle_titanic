@@ -1,0 +1,17 @@
+References
+==========
+
+These references provide insight into the Titanic problem.
+
+Titanic Tutorial `https://www.kaggle.com/alexisbcook/titanic-tutorial`
+
+https://stackoverflow.com/questions/39163354/evaluating-logistic-regression-with-cross-validation
+
+http://www.owlnet.rice.edu/~ns10/Kaggle/pdfs/Titanic_Project.pdf
+
+https://www.kaggle.com/c/titanic/discussion/26284
+
+https://www.kaggle.com/c/titanic/discussion/57447
+
+
+https://www.kaggle.com/ldfreeman3/a-data-science-framework-to-achieve-99-accuracy/notebook

@@ -1,0 +1,17 @@
+Kaggle Results
+==============
+
+
+I was shocked the first time I looked at the Kaggle Titanic Public
+Leader Board. On October 18, 2019 there were 71 entries with a
+perfect accuracy score. My first submission I received a 0.77511.
+
+After my shock had worn off and I realized that these perfect
+scores were impossible.  I wanted to know what was considered a
+good accuracy score for the Titanic Kaggle data set.  There
+was an excellent analysis done by `ShapedSundew9 <https://www.kaggle.com/c/titanic/discussion/26284>`_
+
+ShapedSundew9 concluded that a score in the range 83-84% should
+be considered good. It looks like I have some work to do.  
+
+
