@@ -252,6 +252,71 @@ going to split the Fare into quartiles.  I split the Fare into quartiles with
 pd.qcut() on the training data set and then applied the same binning ranges to
 the holdout data using pd.cut().
 
-
 I have implemented all three of these new features and my Kaggle Public score
 dropped to 0.7790.
+
+Nov 11, 2019 at 9:53:39 AM
+--------------------------
+
+I noticed that there were 15 passengers with a fare of 0. Since it is unlikely
+that passengers travelled on the Titanic for free, I will assume that these 0
+fares are based upon missing information.  Passengers traveling with a fare
+equal to 0 will be replaced with the median fare for that pclass.
+
+I have updated the TransformedData and rerun the transformed data for
+
+    train.csv
+    holdout.csv.
+
+This data is now in
+
+    '../data/processed/train_v3.csv'
+    '../data/processed/holdout_v3.csv'
+
+I learned some interesting things today.  I submitted several more models to
+Kaggle website.  I still haven't been able to beat logreg_model_3.  I was able
+to reproduce the the score to Kaggle with logreg_model_3 with the old model.
+The old model used pclass as a numerical data set. I fixed that and resubmitted
+the predictions with the following model:
+
+    Features:
+        Index(['title_Mr', 'title_Mrs', 'family_size', 'is_child', 'pclass_2',
+        'pclass_3'], dtype='object')
+
+    Model:
+        LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+                   intercept_scaling=1, l1_ratio=1, max_iter=500,
+                   multi_class='warn', n_jobs=None, penalty='l2',
+                   random_state=42, solver='warn', tol=0.0001, verbose=0,
+                   warm_start=False)
+
+    Accuracy:
+        Accuracy Score on X_test,y_test:  0.7989
+
+    Cross Validation Scores:
+	    * Accuracy 	: 0.8301 (+/- 0.0332)
+	    * Recall		: 0.7201 (+/- 0.0546)
+	    * Precision	: 0.8079 (+/- 0.0526)
+	    * F1		    : 0.7612 (+/- 0.0477)
+
+    11/11/19, logreg_model_3_resubmit.csv,  0.77511, 0.8301, 0.7201,0.8079,0.7612
+
+
+The score dropped from the first submission. The only major difference is the
+processed data used. In the first submission, I used the transformed and
+holdout data sets **_v1.csv**.  In the new data set I used **_v3.csv**.  The
+difference between the two data sets is I cleaned up the Title transformations,
+fixed the age and fare ranges to match what is provided online. The age and
+fare data columns are not used in the logreg model. The title is used. I
+suspect that the inclusion of more titles (Officer, Royalty) is
+making the model less generic.
+
+
+Nov 12, 2019 at 9:56:26 am
+--------------------------
+
+I have installed the Kaggle API. You should now be able to upload a submission
+using the Kaggle API. Here is an example,
+
+kaggle competitions submit favorita-grocery-sales-forecasting -f sample_submission_favorita.csv.7z -m "My submission message"
+

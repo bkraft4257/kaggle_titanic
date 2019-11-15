@@ -52,7 +52,10 @@ class ExtractData:
         Xy_raw = pd.read_csv(self.filename)
 
         Xy_raw.columns = Xy_raw.columns.str.lower().str.replace(" ", "_")
-        Xy_raw = Xy_raw.rename(columns={"age": "age_known"})
+
+        Xy_raw = Xy_raw.rename(columns={"age": "age_raw"})
+        Xy_raw = Xy_raw.rename(columns={"fare": "fare_raw"})
+
         Xy_raw["pclass"] = Xy_raw["pclass"].astype("category")
         self.Xy_raw = Xy_raw.set_index("passengerid")
 
@@ -76,7 +79,7 @@ class TransformData:
         "Mme.": "Miss.",
         "Sir.": "Mr.",
         "Ms.": "Mrs.",
-        "Rev.": "Mr.",
+        "Rev.": np.nan,
         "Col.": "Mr.",
         "Capt.": "Mr.",
         "Lady.": "Miss.",
@@ -92,9 +95,9 @@ class TransformData:
         age_bin_label=None,
         embarked_mode=None,
         Xy_age_estimate=None,
+        Xy_fare_estimate=None,
         drop_columns=None,
         translate_title_dictionary=None,
-        fare_mode=None,
         fare_bins=None,
         fare_bin_labels=["q1", "q2", "q3", "q4"],
     ):
@@ -103,7 +106,6 @@ class TransformData:
 
         * adult_age_threshold_min
         * age_bins
-        * fare_mode
         * embarked_mode
         * Xy_age_estimate
 
@@ -134,6 +136,7 @@ class TransformData:
 
         self.translate_title_dictionary = translate_title_dictionary
         self.Xy_age_estimate = Xy_age_estimate
+        self.Xy_fare_estimate = Xy_fare_estimate
 
         self.raw = raw_data
         self.adult_age_threshold_min = adult_age_threshold_min
@@ -143,19 +146,14 @@ class TransformData:
 
         self.Xy = self.raw.Xy_raw.copy()
 
-        if fare_mode is None:
-            fare_mode = self.Xy["fare"].mode()[0]
-
         self.fare_bins = fare_bins
         self.fare_bin_labels = fare_bin_labels
 
         if embarked_mode is None:
             embarked_mode = self.Xy["embarked"].mode()[0]
 
-        self.fare_mode = fare_mode
         self.embarked_mode = embarked_mode
 
-        self.impute_missing_fare()
         self.impute_missing_embarked()
 
         self.extract_title()
@@ -163,9 +161,16 @@ class TransformData:
         self.extract_cabin_number()
         self.extract_cabin_prefix()
         self.calc_family_size()
-        self.estimate_age()
-        self.calc_age_bins()
+
+        self.reset_fare_equals_0_nan()
+        self.estimate_fare()
+        self.impute_missing_fare()
         self.calc_fare_bins()
+
+        self.estimate_age()
+        self.impute_missing_age()
+        self.calc_age_bins()
+
         self.calc_is_child()
         self.calc_is_traveling_alone()
 
@@ -191,12 +196,12 @@ class TransformData:
         """
         Extracts cabin number from ticket.
         """
-        self.Xy["cabin_number"] = self.Xy.ticket.str.extract("(\d+)$")
+        self.Xy["cabin_number"] = self.Xy.ticket.str.extract(r"(\d+)$")
 
     def extract_cabin_prefix(self):
         """Extracts cabin prefix from ticket.
         """
-        self.Xy["cabin_prefix"] = self.Xy.ticket.str.extract("^(.+) ")
+        self.Xy["cabin_prefix"] = self.Xy.ticket.str.extract(r"^(.+) ")
 
     def extract_title(self):
         """Extract title from the name using nameparser.
@@ -254,13 +259,30 @@ class TransformData:
 
         assert (len(self.fare_bins) - 1) == len(self.fare_bin_labels)
 
-    def clean(self,):
-        """Clean data to remove missing data and "unnecessary" features.
-
-        Arguments:
-            in_raw_df {pd.DataFrame} -- Dataframe containing all columns and rows Kaggle Titanic Training Data set
+    def reset_fare_equals_0_nan(self):
         """
-        self.Xy = self.Xy_raw.drop(self.drop_columns, axis=1)
+
+        """
+        self.Xy["fare_raw"] = self.Xy["fare_raw"].replace(0, np.nan)
+
+    def estimate_fare(self, groupby_columns="pclass"):
+        """Estimate fare for passengers that travelled for free (fare = 0).
+        This is based upon the assumption that no passengers traveled for free
+        and that a fare=0 means that information was missing.  Estimate the NaN
+        fares with median of the fare.
+
+        Keyword Arguments:
+            groupby_columns {str} -- The columns that will be grouped over to
+            estimate the fare.
+        """
+        if self.Xy_fare_estimate is None:
+            self.Xy_fare_estimate = (
+                self.Xy.groupby(groupby_columns).fare_raw.median().to_frame().round(2)
+            )
+
+            self.Xy_fare_estimate = self.Xy_fare_estimate.rename(
+                columns={"fare_raw": "fare_estimate"}
+            )
 
     def estimate_age(self, groupby_columns=["sex", "title"]):
         """Estimate age of passenger when age is unknown.   The age will be
@@ -272,22 +294,29 @@ class TransformData:
 
         if self.Xy_age_estimate is None:
             self.Xy_age_estimate = (
-                self.Xy.groupby(groupby_columns).age_known.mean().to_frame().round(1)
+                self.Xy.groupby(groupby_columns).age_raw.mean().to_frame().round(1)
             )
 
             self.Xy_age_estimate = self.Xy_age_estimate.rename(
-                columns={"age_known": "age_estimate"}
+                columns={"age_raw": "age_estimate"}
             )
+
+    def impute_missing_age(self):
+
+        groupby_columns = list(self.Xy_age_estimate.index.names)
 
         out_df = (
             self.Xy.reset_index()
             .merge(
-                self.Xy_age_estimate, on=groupby_columns, how="left", indicator=False
+                self.Xy_age_estimate.reset_index(),
+                on=groupby_columns,
+                how="left",
+                indicator=False,
             )
             .set_index("passengerid")
         )
 
-        out_df["age"] = out_df["age_known"].fillna(out_df["age_estimate"])
+        out_df["age"] = out_df["age_raw"].fillna(out_df["age_estimate"])
 
         self.Xy = out_df
 
@@ -296,7 +325,19 @@ class TransformData:
         could be improved by looking at additional features. In particular,
         the number of passengers in the party and pclass.
         """
-        self.Xy["fare"] = self.Xy["fare"].fillna(self.fare_mode)
+        groupby_columns = list(self.Xy_fare_estimate.index.names)
+
+        out_df = (
+            self.Xy.reset_index()
+            .merge(
+                self.Xy_fare_estimate, on=groupby_columns, how="left", indicator=False
+            )
+            .set_index("passengerid")
+        )
+
+        out_df["fare"] = out_df["fare_raw"].fillna(out_df["fare_estimate"])
+
+        self.Xy = out_df
 
     def impute_missing_embarked(self):
         """Imputes missing embarkment location based upon the most frequent
@@ -316,7 +357,15 @@ def transform_X_numerical(Xy, columns=["age", "fare", "family_size"]):
 
 def transform_X_categorical(
     Xy,
-    columns=["sex", "embarked", "title", "age_bin", "is_child", "is_traveling_alone"],
+    columns=[
+        "sex",
+        "embarked",
+        "title",
+        "age_bin",
+        "fare_bin",
+        "is_child",
+        "is_traveling_alone",
+    ],
     drop_first=True,
 ):
 
@@ -332,6 +381,7 @@ def transform_X(
         "embarked",
         "title",
         "age_bin",
+        "fare_bin",
         "is_child",
         "is_traveling_alone",
         "pclass",
