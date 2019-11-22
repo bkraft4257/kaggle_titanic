@@ -338,4 +338,17 @@ date,     model,                    holdout_accuracy, accuracy, recall,     prec
 
 Old preprocessed data will also be removed.  json files will be created to provide information
 about the preprocessed data and the Kaggle submissions. All models will be retested with a
-new Kaggle submission using the command line interface. 
+new Kaggle submission using the command line interface.
+
+Nov 22, 2019 at 8:16:31 am
+--------------------------
+
+Kaggle Titanic refactor day is today.
+
+1) Refactor models so only on version of each model is in repository
+2) Create Unit tests
+3) Measure code complexity
+4) Optimize Hyperparameters with HyperOpt
+5) Validate data with Great Expectations
+
+

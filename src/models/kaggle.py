@@ -6,7 +6,7 @@ import subprocess
 KAGGLE_SUBMISSION_TEMPLATE = "../data/raw/kaggle_gender_submission.csv"
 
 
-def submit_to_kaggle_titanic_competition(filename, message, verbose=True):
+def submit_to_kaggle_titanic_competition(filename, message, upload=True, verbose=True):
     """Submits a CSV file with a message to Kaggle's Titanic Competition.
     The file Before the file is uploaded
 
@@ -18,6 +18,7 @@ def submit_to_kaggle_titanic_competition(filename, message, verbose=True):
 
     Keyword Arguments:
         verbose {bool} --  (default: {True})
+        upload {bool} --  (default: {True}) If true upload data to kaggle.
 
     Returns:
         stdout - Output string from the subprocess module
@@ -27,7 +28,9 @@ def submit_to_kaggle_titanic_competition(filename, message, verbose=True):
 
     try:
         if is_valid_kaggle_submission(filename, message):
-            stdout, stderr = upload_kaggle_titanic_submission_via_api(filename, message)
+            stdout, stderr = upload_kaggle_titanic_submission_via_api(
+                filename, message, upload
+            )
     except:
         print("Kaggle submission of {filename} failed.")
 
@@ -61,7 +64,7 @@ def is_valid_kaggle_submission(filename, message):
     return is_index_correct & is_index_names_correct & is_column_names_correct
 
 
-def upload_kaggle_titanic_submission_via_api(filename, message):
+def upload_kaggle_titanic_submission_via_api(filename, message, upload=True):
     """Upload CSV to Kaggle Titanic Competition via Kaggle API.
 
         Arguments:
@@ -75,13 +78,25 @@ def upload_kaggle_titanic_submission_via_api(filename, message):
         stderr {str} -- Standard Error during subprocess submission.
     """
 
-    process = subprocess.Popen(
-        ["kaggle", "competitions", "submit", "titanic", "-f", filename, "-m", message],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
+    if upload:
+        process = subprocess.Popen(
+            [
+                "kaggle",
+                "competitions",
+                "submit",
+                "titanic",
+                "-f",
+                filename,
+                "-m",
+                message,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
 
-    stdout, stderr = process.communicate()
+        stdout, stderr = process.communicate()
+    else:
+        stdout, stderr = None, None
 
     print(filename)
     print(message)
