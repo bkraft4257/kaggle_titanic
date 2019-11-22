@@ -351,4 +351,12 @@ Kaggle Titanic refactor day is today.
 4) Optimize Hyperparameters with HyperOpt
 5) Validate data with Great Expectations
 
+I cleaned up the Logistic Regression model by deleting all models except the
+model with the highest accuracy and fewest features.  Ths allowed me to achieve
+
+date,     model,        holdout_accuracy, accuracy, recall,  precision,  f1
+10/28/19, logreg model, 0.79425,          0.8384,   0.7162,  0.8306,     0.7691
+
+I optimized the Logisitic Regression model with HyperOpt but this did not change
+the holdout accuracy.
 
