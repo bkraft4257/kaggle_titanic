@@ -29,3 +29,13 @@ Model Scorecard
    :widths: 8, 20, 20, 20,20, 10, 30
 
 NS = Not Submitted
+
+
+Kaggle Public Leader Board
+--------------------------
+
+.. |public_leader_board| image:: _images/public_leader_board.png
+  :width: 600
+  :alt: Alternative text
+
+|public_leader_board|

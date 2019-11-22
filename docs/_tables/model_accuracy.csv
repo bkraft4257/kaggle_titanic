@@ -1,4 +1,4 @@
 date,     model,                    holdout_accuracy, accuracy, recall,     precision, f1
 10/28/19, dummy_most_frequent,      NS,               0.6223,   ,           ,
-11/22/19, logreg model,             0.79425,          0.8384,   0.7162,     0.8306,     0.7691
 11/22/19, xgb,                      0.78468,          0.8315,   0.7163,     0.8128,     0.7605
+11/22/19, logreg model,             0.79425,          0.8384,   0.7162,     0.8306,     0.7691
