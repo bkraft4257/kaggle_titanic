@@ -320,3 +320,22 @@ using the Kaggle API. Here is an example,
 
 kaggle competitions submit favorita-grocery-sales-forecasting -f sample_submission_favorita.csv.7z -m "My submission message"
 
+
+Nov 18, 2019 at 1:08:38 PM
+--------------------------
+
+The documentation and models in this project have become unmanageable.  It needs
+to be cleaned up so that it is easy to understand what models have been created.
+For this reason,  I am going to delete notebooks associated with models that
+are not the top modesl from each category.  Models that will be retained are
+
+date,     model,                    holdout_accuracy, accuracy, recall,     precision, f1
+10/28/19, dummy_most_frequent,      NS,               0.6223,   ,           ,
+10/28/19, logreg_gender_only,       0.76555,          0.7958,   0.6959,     0.7455,     0.7189
+10/28/19, logreg model_3,           0.79425,          0.8384,   0.7162,     0.8306,     0.7691
+11/05/19, dtree_model_2,            0.78468,          0.8272,   0.7012,     0.8143,     0.7516
+11/07/19, xgb_3,                    0.77990,          0.8329,   0.6939,     0.8357,     0.7572
+
+Old preprocessed data will also be removed.  json files will be created to provide information
+about the preprocessed data and the Kaggle submissions. All models will be retested with a
+new Kaggle submission using the command line interface. 

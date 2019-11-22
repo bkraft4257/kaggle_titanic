@@ -1,8 +1,10 @@
-
 #!/usr/bin/env python
 
 import pandas as pd
 import subprocess
+
+KAGGLE_SUBMISSION_TEMPLATE = "../data/raw/kaggle_gender_submission.csv"
+
 
 def submit_to_kaggle_titanic_competition(filename, message, verbose=True):
     """Submits a CSV file with a message to Kaggle's Titanic Competition.
@@ -27,7 +29,7 @@ def submit_to_kaggle_titanic_competition(filename, message, verbose=True):
         if is_valid_kaggle_submission(filename, message):
             stdout, stderr = upload_kaggle_titanic_submission_via_api(filename, message)
     except:
-        print('Kaggle submission of {filename} failed.')
+        print("Kaggle submission of {filename} failed.")
 
         print(stdout)
         print(stderr)
@@ -43,15 +45,10 @@ def is_valid_kaggle_submission(filename, message):
     competition.
     """
 
-    y_pred_file = (pd.read_csv(filename)
-                    .set_index('PassengerId')
-                   )
-
+    y_pred_file = pd.read_csv(filename).set_index("PassengerId")
 
     # The code below is to test that you have a valid submission
-    y_submission = (pd.read_csv('../data/raw/gender_submission.csv')
-                    .set_index('PassengerId')
-                   )
+    y_submission = pd.read_csv(KAGGLE_SUBMISSION_TEMPLATE).set_index("PassengerId")
 
     is_index_correct = (y_pred_file.index == y_submission.index).all()
     is_index_names_correct = y_pred_file.index.names == y_submission.index.names
@@ -78,9 +75,11 @@ def upload_kaggle_titanic_submission_via_api(filename, message):
         stderr {str} -- Standard Error during subprocess submission.
     """
 
-    process = subprocess.Popen(['kaggle', 'competitions', 'submit', 'titanic', '-f', filename, '-m', message],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE)
+    process = subprocess.Popen(
+        ["kaggle", "competitions", "submit", "titanic", "-f", filename, "-m", message],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     stdout, stderr = process.communicate()
 

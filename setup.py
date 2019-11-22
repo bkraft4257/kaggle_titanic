@@ -4,7 +4,7 @@ setup(
     name='src',
     packages=find_packages(),
     version='0.1.0',
-    description='First Kaggle competition',
+    description='Kaggle Titanic Competition',
     author='Bob Kraft',
     license='MIT',
 )

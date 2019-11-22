@@ -17,6 +17,8 @@ Contents:
    methods
    references
 
+   user_stories
+   project_structure
    log
    doc_strings
 
