@@ -360,3 +360,22 @@ date,     model,        holdout_accuracy, accuracy, recall,  precision,  f1
 I optimized the Logisitic Regression model with HyperOpt but this did not change
 the holdout accuracy.
 
+xgb.csv
+
+This is a submission test via the Kaggle API.
+
+
+Here is the XGB Classifier model
+
+XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
+              colsample_bynode=1, colsample_bytree=0.3, gamma=0,
+              learning_rate=0.01, max_delta_step=0, max_depth=4,
+              max_features='sqrt', min_child_weight=1, missing=None,
+              n_estimators=1000, n_jobs=1, nthread=None,
+              objective='binary:logistic', random_state=42, reg_alpha=0,
+              reg_lambda=1, scale_pos_weight=1, seed=123, silent=None,
+              subsample=0.3, verbosity=1)
+
+Index(['is_child', 'fare_bin_q4', 'age_bin_baby', 'title_Miss', 'family_size',
+       'pclass_3', 'title_Mrs', 'title_Mr'],
+      dtype='object')
