@@ -351,6 +351,9 @@ Kaggle Titanic refactor day is today.
 4) Optimize Hyperparameters with HyperOpt
 5) Validate data with Great Expectations
 
+Nov 22, 2019 at 8:16:31 am
+--------------------------
+
 I cleaned up the Logistic Regression model by deleting all models except the
 model with the highest accuracy and fewest features.  Ths allowed me to achieve
 
@@ -360,11 +363,9 @@ date,     model,        holdout_accuracy, accuracy, recall,  precision,  f1
 I optimized the Logisitic Regression model with HyperOpt but this did not change
 the holdout accuracy.
 
-xgb.csv
 
-This is a submission test via the Kaggle API.
-
-
+Nov 22, 2019 at 3:52:42 PM
+--------------------------
 Here is the XGB Classifier model
 
 XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
@@ -379,3 +380,9 @@ XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
 Index(['is_child', 'fare_bin_q4', 'age_bin_baby', 'title_Miss', 'family_size',
        'pclass_3', 'title_Mrs', 'title_Mr'],
       dtype='object')
+
+
+Nov 22, 2019 at 3:53:03 pm
+--------------------------
+
+Remove Decision Tree models from documentation
