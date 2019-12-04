@@ -379,10 +379,24 @@ XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
 
 Index(['is_child', 'fare_bin_q4', 'age_bin_baby', 'title_Miss', 'family_size',
        'pclass_3', 'title_Mrs', 'title_Mr'],
-      dtype='object')
+       dtype='object')
+
 
 
 Nov 22, 2019 at 3:53:03 pm
 --------------------------
 
 Remove Decision Tree models from documentation
+
+Dec 4, 2019 at 1:25:18 PM
+-------------------------
+
+Created src/models/run.py so saved models can be run from the command line.  For example,
+
+    >> cdkt
+    >> cd data/processed
+    >> ../../src/models/run.py ../../models/xgb.joblib X_test__xgb.csv -y y_test__xgb.csv -v -o kaggle_test_xgb_model.csv
+    >> ../../src/models/run.py ../../models/logreg.joblib X_test__logres.csv -y y_test__logres.csv -v -o kaggle_test_logres_model.csv
+
+Updated documentation to include this new information.  
+

@@ -32,9 +32,12 @@ from sklearn import metrics
 
 
 def argparse_command_line():
-    """
-    Extract parameters from the command line.
-    """
+    """  Extract parameters from the command line.
+
+    
+    Returns:
+        {arg_parse object} -- Command line arguments as parsed with arg_parse.
+    """    
 
     parser = argparse.ArgumentParser(prog="run")
     parser.add_argument("model", help="Filename of sklearn joblib model", type=str)
@@ -85,7 +88,7 @@ def read_y(y_filename):
       y_filename {str} -- Filename of CSV file of known y values.
 
     Returns:
-      [dataframe] -- Pandas dataframe of known y values.
+      y {dataframe} -- Pandas dataframe of known y values.
     """
 
     if y_filename is not None:
@@ -97,11 +100,20 @@ def read_y(y_filename):
 
 
 def write_kaggle_submission_output_file(y_pred, filename):
-    """[summary]
+    """ Write a Kaggle submission file. 
+
+        >> head -5 model__logres.csv
+
+            PassengerId,Survived
+            892,0
+            893,1
+            894,0
+            895,0
+            ...
 
     Arguments:
-      y_pred {[type]} -- [description]
-      filename {[type]} -- [description]
+      y_pred {dataframe} -- Predicted y labels.
+      filename {str} -- CSV filename containing known labels. 
     """
 
     if filename is not None:
@@ -109,14 +121,14 @@ def write_kaggle_submission_output_file(y_pred, filename):
 
 
 def predict(model, X):
-    """Predict y from model and X
+    """ Predict y from model and X
 
     Arguments:
       model {scikit learn model object} -- [description]
-      X {[dataframe]} -- [description]
+      X {dataframe} -- [description]
 
     Returns:
-      [dataframe] -- [description]
+      y_pred {dataframe} -- Predicted labels from model.
     """
     y_pred = pd.Series(model.predict(X), index=X.index, name="Survived").to_frame()
     y_pred.index.names = ["PassengerId"]
@@ -125,14 +137,15 @@ def predict(model, X):
 
 
 def measure_accuracy(y_known, y_predicted):
-    """[summary]
+    """ Measure accuracy of known and predicted labels. If this function is called
+        the predicted accuracy score will be displayed to standard out. 
 
     Arguments:
-        y_known {[type]} -- [description]
-        y_predicted {[type]} -- [description]
+        y_known {dataframe} -- [description]
+        y_predicted {dataframe} -- [description]
 
     Returns:
-        [type] -- [description]
+        [float] -- Returns the predicted accuracy score. 
     """
 
     predicted_accuracy_score = metrics.accuracy_score(y_known, y_predicted)
@@ -142,7 +155,7 @@ def measure_accuracy(y_known, y_predicted):
 
 
 def main():
-    """Main function for command line interface.
+    """ Main function for command line interface.
     """
 
     in_args = argparse_command_line()

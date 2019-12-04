@@ -27,7 +27,7 @@ def submit_to_kaggle_titanic_competition(filename, message, upload=True, verbose
     stdout, stderr = None, None
 
     try:
-        if is_valid_kaggle_submission(filename, message):
+        if is_valid_kaggle_submission(filename):
             stdout, stderr = upload_kaggle_titanic_submission_via_api(
                 filename, message, upload
             )
@@ -42,10 +42,16 @@ def submit_to_kaggle_titanic_competition(filename, message, upload=True, verbose
     return stdout, stderr
 
 
-def is_valid_kaggle_submission(filename, message):
+def is_valid_kaggle_submission(filename):
     """
     Verify that the file you are submitting to Kaggle is valid for that
     competition.
+
+    Arguments:
+        filename {str} -- [description]
+    
+    Returns:
+        {bool} -- True if file is a valid Kaggle submission.  False otherwise.
     """
 
     y_pred_file = pd.read_csv(filename).set_index("PassengerId")
