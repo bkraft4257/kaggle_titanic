@@ -4,17 +4,18 @@ repos:
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
+        exclude: ".*.csv"
       - id: trailing-whitespace
       - id: check-json
   - repo: https://github.com/psf/black
     rev: 19.3b0
     hooks:
       - id: black
-  -   repo: local
-      hooks:
-      -   id: wily
-          name: wily
-          entry: wily diff
-          verbose: true
-          language: python
-          additional_dependencies: [wily]
+  - repo: local
+    hooks:
+      - id: wily
+        name: wily
+        entry: wily diff
+        verbose: true
+        language: python
+        additional_dependencies: [wily]
