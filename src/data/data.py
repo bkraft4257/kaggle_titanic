@@ -349,6 +349,23 @@ class TransformData:
 # =============================================================================
 
 
+def extract_last_name(in_series: pd.Series):
+    """ Extracts last name from name feature using nameparser from a series.
+    
+    Arguments:
+        in_df {pd.Series} -- [description]
+
+    Returns:
+        Pandas series with only the last name. 
+    """
+    assert in_series.name == "name"
+
+    out_series = in_series.apply(lambda x: HumanName(x).last)
+    out_series.name = "last_name"
+
+    return out_series
+
+
 def transform_X_numerical(Xy, columns=["age", "fare", "family_size"]):
 
     # Scale the numerical columns.

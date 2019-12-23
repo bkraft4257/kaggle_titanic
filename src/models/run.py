@@ -154,7 +154,7 @@ def measure_accuracy(y_known, y_predicted):
     return predicted_accuracy_score
 
 
-def main():
+def run_model():
     """ Main function for command line interface.
     """
 
@@ -179,4 +179,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run_model())
