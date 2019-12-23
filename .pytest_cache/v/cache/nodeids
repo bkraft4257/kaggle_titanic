@@ -1,5 +1,7 @@
 [
   "tests/test_data_transforms.py::test_extract_last_name_series[first_last]",
   "tests/test_data_transforms.py::test_extract_last_name_series[first_middle_last]",
-  "tests/test_data_transforms.py::test_extract_last_name_series[first_initial_last_name]"
+  "tests/test_data_transforms.py::test_extract_last_name_series[first_initial_last_name]",
+  "tests/test_data_transforms.py::test_calc_family_size",
+  "tests/test_data_transforms.py::test_extract_title"
 ]

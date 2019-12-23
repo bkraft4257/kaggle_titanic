@@ -8,6 +8,8 @@ from sklearn.preprocessing import scale
 from IPython.display import display
 from collections import Counter
 
+import great_expectations as ge
+
 
 class ExtractData:
     """Extract Titanic data from the Kaggle's train.csv file.
@@ -180,6 +182,7 @@ class TransformData:
         """Create feature family size, which is the number of people (including
         self) that are traveling together.
         """
+        # self.Xy = calc_family_size(Xy)
         self.Xy["family_size"] = self.Xy.sibsp + self.Xy.parch + 1
 
     def calc_is_traveling_alone(self):
@@ -345,18 +348,80 @@ class TransformData:
         """
         self.Xy["embarked"] = self.Xy["embarked"].fillna(self.embarked_mode)
 
+    # =============================================================================
 
-# =============================================================================
+
+TRANSLATE_TITLE_DICTIONARY = {
+    "Mlle.": "Miss.",
+    "Mme.": "Miss.",
+    "Sir.": "Mr.",
+    "Ms.": "Mrs.",
+    "Rev.": np.nan,
+    "Col.": "Mr.",
+    "Capt.": "Mr.",
+    "Lady.": "Miss.",
+    "the Countess. of": "Mrs.",
+    "Dr.": np.nan,
+}
 
 
-def extract_last_name(in_series: pd.Series):
-    """ Extracts last name from name feature using nameparser from a series.
-    
+def extract_title(in_df, translate_title_dictionary=TRANSLATE_TITLE_DICTIONARY):
+    """Extract title from the name using nameparser.
+    If the Title is empty then we will fill the title with either Mr or Mrs depending upon the sex.  This
+    is adequate for the train and holdout data sets.  The title being empty only occurs for passenger 1306
+    in the holdout data set.  A more appropriate way to do this is to check on the sex and age to correctly
+    assign the title.
+
+    Arguments:
+        in_df: Dataframe containing columns name and sex
+
+    Return:
+
+    """
+
+    out_df = in_df.copy()
+
+    title = (
+        out_df.name.apply(lambda x: HumanName(x).title)
+        .replace({r"\.": ""}, regex=True)
+        .replace(translate_title_dictionary)
+        .replace({"": np.nan})
+        .fillna(out_df["sex"])
+        .replace({"female": "Mrs", "male": "Mr"})
+    )
+
+    out_df["title"] = title
+
+    return out_df
+
+
+def calc_family_size(in_df: pd.DataFrame):  # -> pd.DataFrame:
+    """
+    Create feature family size, which is the number of people (including
+    self) that are traveling together.
+
+    Arguments:
+        in_df: Dataframe containing columns sibsp and parch
+
+    Returns:
+        Dataframe with the new column family_size, where family size
+        is sibsp + parch + 1
+    """
+    out_df = in_df.copy()
+
+    out_df["family_size"] = out_df.sibsp + out_df.parch + 1
+
+    return out_df
+
+
+def extract_last_name(in_series: pd.Series):  # ->  pd.Series:
+    """ Extracts last name from name featureusing nameparser from a series.
+
     Arguments:
         in_df {pd.Series} -- [description]
 
     Returns:
-        Pandas series with only the last name. 
+        Pandas series with only the last name.
     """
     assert in_series.name == "name"
 

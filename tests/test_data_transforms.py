@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from src.data.data import extract_last_name
+from src.data.data import extract_last_name, calc_family_size, extract_title
 
 test_data_1 = [
     (
@@ -37,3 +37,33 @@ def test_extract_last_name_series(in_data, expected):
     assert in_series.name == "name"
     assert out_series.name == "last_name"
     assert out_series.equals(expected_series)
+
+
+def test_calc_family_size():
+
+    in_df = pd.DataFrame(data={"sibsp": [1, 2, 3], "parch": [0, 0, 1]})
+    out_df = calc_family_size(in_df)
+    expected_df = pd.DataFrame(
+        data={"sibsp": [1, 2, 3], "parch": [0, 0, 1], "family_size": [2, 3, 5]}
+    )
+
+    print(in_df)
+    print(out_df)
+    print(expected_df)
+
+    assert expected_df.equals(out_df)
+
+
+def test_extract_title():
+
+    in_df = pd.DataFrame(data={"name": ["Dr. Robert A. Kraft"], "sex": ["male"]})
+    out_df = extract_title(in_df)
+    expected_df = pd.DataFrame(
+        data={"name": ["Dr. Robert A. Kraft"], "sex": ["male"], "title": ["Dr"]}
+    )
+
+    print(in_df)
+    print(out_df)
+    print(expected_df)
+
+    assert expected_df.equals(out_df)
