@@ -141,8 +141,6 @@ class TransformData:
         assert len(age_bins) == len(age_bin_label) + 1
 
         self.translate_title_dictionary = translate_title_dictionary
-        self.Xy_age_estimate = xy_age_estimate
-        self.Xy_fare_estimate = xy_fare_estimate
 
         self.raw = raw_data
         self.adult_age_threshold_min = adult_age_threshold_min
@@ -152,6 +150,10 @@ class TransformData:
 
         self.Xy = self.raw.Xy_raw.copy()
 
+        self.Xy_age_estimate = xy_age_estimate
+
+        self.Xy_fare_estimate = xy_fare_estimate
+
         self.fare_bins = fare_bins
         self.fare_bin_labels = fare_bin_labels
 
@@ -160,81 +162,43 @@ class TransformData:
 
         self.embarked_mode = embarked_mode
 
-        # Methods
+    # Methods
 
-        self.impute_missing_embarked()
-
-        self.Xy = extract_title(self.Xy, self.translate_title_dictionary)
-        self.extract_title()
-        self.extract_last_name()
-        self.calc_family_size()
+    def transform(self):
+        self.Xy["embarked"] = impute_missing_embarked(
+            self.Xy.embarked, self.embarked_mode
+        )
+        self.Xy["title"] = extract_title(
+            self.Xy[["name", "sex"]], self.translate_title_dictionary
+        )
+        self.Xy["last_name"] = extract_last_name(self.Xy.name)
+        self.Xy["family_size"] = calc_family_size(self.Xy[["sibsp", "parch"]])
 
         self.reset_fare_equals_0_nan()
-        self.estimate_fare()
+
+        if self.Xy_fare_estimate is None:
+            self.Xy_fare_estimate = estimate_by_group(
+                self.Xy, "fare_raw", ["pclass"], "median", 2
+            ).rename("fare_estimate")
+
         self.impute_missing_fare()
         self.calc_fare_bins()
 
-        self.estimate_age()
+        if self.Xy_age_estimate is None:
+            self.Xy_age_estimate = estimate_by_group(
+                self.Xy, "age_raw", ["sex", "title"], "mean", 1
+            ).rename("age_estimate")
+
         self.impute_missing_age()
         self.calc_age_bins()
 
-        self.calc_is_child()
-        self.calc_is_traveling_alone()
-
-        self.Xy = self.Xy.sort_index()
-
-    def calc_family_size(self):
-        """
-        Create feature family size, which is the number of people (including
-        self) that are traveling together.
-
-        Arguments:
-            in_df: Dataframe containing columns sibsp and parch
-
-        Returns:
-            Dataframe with the new column family_size, where family size
-            is sibsp + parch + 1
-        """
-
-        self.Xy["family_size"] = self.Xy.sibsp + self.Xy.parch + 1
-
-    def calc_is_traveling_alone(self):
-        """Create Boolean feature if passenger is traveling alone. (True=Traveling alone, False=Traveling in group)
-        """
-        self.Xy["is_traveling_alone"] = self.Xy["family_size"] == 1
-
-    def calc_is_child(self):
-        """Calculate Boolean feature if passenger is a child as determined by the self.adult_age_threshold_min
-        """
-        self.Xy["is_child"] = self.Xy.age < self.adult_age_threshold_min
-
-    def extract_title(self):
-        """Extract title from the name using nameparser.
-
-        If the Title is empty then we will fill the title with either Mr or Mrs depending upon the sex.  This
-        is adequate for the train and holdout data sets.  The title being empty only occurs for passenger 1306
-        in the holdout data set.  A more appropriate way to do this is to check on the sex and age to correctly
-        assign the title
-        """
-        title = (
-            self.Xy.name.apply(lambda x: HumanName(x).title)
-            .replace({r"\.": ""}, regex=True)
-            .replace(self.translate_title_dictionary)
-            .replace({"": np.nan})
-            .fillna(self.Xy["sex"])
-            .replace({"female": "Mrs", "male": "Mr"})
+        self.Xy["is_child"] = calc_is_child(
+            self.Xy["age"], self.adult_age_threshold_min
         )
 
-        self.Xy["title"] = title
+        self.Xy["is_traveling_alone"] = calc_is_traveling_alone(self.Xy["family_size"])
 
-    def extract_last_name(self):
-        """
-        Extracts last name from name feature using nameparser.
-
-        Returns:
-
-        """
-        self.Xy["last_name"] = self.Xy.name.apply(lambda x: HumanName(x).last)
+        self.Xy = self.Xy.sort_index()
 
     def calc_age_bins(self):
         """Calculates age bins.
@@ -349,12 +313,6 @@ class TransformData:
 
         self.Xy = out_df
 
-    def impute_missing_embarked(self):
-        """Imputes missing embarkment location based upon the most frequent
-        place to embark.
-        """
-        self.Xy["embarked"] = self.Xy["embarked"].fillna(self.embarked_mode)
-
     # =============================================================================
 
 
@@ -372,7 +330,7 @@ TRANSLATE_TITLE_DICTIONARY = {
 }
 
 
-def extract_title(in_df: pd.DataFrame, translate_title_dictionary=None) -> pd.DataFrame:
+def extract_title(in_df: pd.DataFrame, translate_title_dictionary=None) -> pd.Series:
     """
     Extract title from the name using nameparser.
     If the Title is empty then we will fill the title with either Mr or Mrs depending upon the sex.  This
@@ -406,7 +364,7 @@ def extract_title(in_df: pd.DataFrame, translate_title_dictionary=None) -> pd.Da
 
     out_df["title"] = title
 
-    return out_df
+    return out_df.title
 
 
 def calc_family_size(in_df: pd.DataFrame) -> pd.Series:
@@ -426,7 +384,8 @@ def calc_family_size(in_df: pd.DataFrame) -> pd.Series:
 
 
 def extract_last_name(in_series: pd.Series) -> pd.Series:
-    """ Extracts last name from name featureusing nameparser from a series.
+    """
+    Extracts last name from name featureusing nameparser from a series.
 
     Arguments:
         in_df {pd.Series} -- [description]
@@ -445,8 +404,17 @@ def extract_last_name(in_series: pd.Series) -> pd.Series:
 
 
 def calc_is_child(in_series: pd.Series, adult_age_threshold_min: int = 13) -> pd.Series:
-    """Calculate Boolean feature if passenger is a child as determined by the self.adult_age_threshold_min
     """
+    Calculate Boolean feature if passenger is a child as determined by the self.adult_age_threshold_min
+
+    Args:
+        in_series:
+        adult_age_threshold_min:
+
+    Returns:
+
+    """
+
     assert in_series.name == "age"
     assert adult_age_threshold_min >= 0
 
@@ -474,6 +442,81 @@ def impute_missing_embarked(
     assert assume_embarked_from in ["C", "Q", "S"]
 
     return in_series.fillna(assume_embarked_from)
+
+
+def calc_is_traveling_alone(in_series: pd.Series):
+
+    """Create Boolean feature if passenger is traveling alone. (True=Traveling alone, False=Traveling in group)
+    """
+    assert in_series.name == "family_size"
+
+    return in_series == 1
+
+
+def estimate_by_group(
+    in_df: pd.DataFrame,
+    column_to_estimate,
+    groupby_columns,
+    method="mean",
+    round_to_decimal=2,
+) -> pd.Series:
+    """
+    Estimate fare for passengers that travelled for free (fare = 0).
+    This is based upon the assumption that no passengers traveled for free
+    and that a fare=0 means that information was missing.  Estimate the NaN
+    fares with median of the fare.
+
+    Args:
+        in_df:
+        column_to_estimate: The column to estimate.
+        groupby_columns:  The columns that will be grouped to estimate the desired column by group.
+
+    Returns: pd.Series
+
+    """
+    """
+
+    Keyword Arguments:
+        groupby_columns {str} --
+    """
+    if method == "mean":
+        out_df = (
+            in_df.groupby(groupby_columns)[column_to_estimate]
+            .mean()
+            .round(round_to_decimal)
+        )
+    else:
+        out_df = (
+            in_df.groupby(groupby_columns)[column_to_estimate]
+            .median()
+            .round(round_to_decimal)
+        )
+
+    return out_df
+
+
+def impute_missing_metric(
+    in_series,
+    in_estimate,
+    column_name_of_metric_with_na,
+    column_name_of_estimated_metric,
+    column_name_of_final_metric,
+):
+
+    groupby_columns = list(in_estimate.index.names)
+    index_names = list(in_series.index.names)
+
+    out_df = (
+        in_series.reset_index().merge(
+            in_estimate.reset_index(), on=groupby_columns, how="left", indicator=False
+        )
+    ).set_index(index_names)
+
+    out_df[column_name_of_final_metric] = out_df[column_name_of_metric_with_na].fillna(
+        out_df[column_name_of_estimated_metric]
+    )
+
+    return out_df[column_name_of_final_metric]
 
 
 def transform_X_numerical(Xy, columns=["age", "fare", "family_size"]):

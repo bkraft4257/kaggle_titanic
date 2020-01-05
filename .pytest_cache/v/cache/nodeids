@@ -3,5 +3,18 @@
   "tests/test_data_transforms.py::test_extract_last_name_series[first_middle_last]",
   "tests/test_data_transforms.py::test_extract_last_name_series[first_initial_last_name]",
   "tests/test_data_transforms.py::test_calc_family_size",
-  "tests/test_data_transforms.py::test_extract_title"
+  "tests/test_data_transforms.py::test_extract_title",
+  "tests/test_data_transforms.py::test_calc_is_child[age_threshold_13]",
+  "tests/test_data_transforms.py::test_calc_is_child[age_threshold_15]",
+  "tests/test_data_transforms.py::test_calc_is_child[age_threshold_15.5_float]",
+  "tests/test_data_transforms.py::test_calc_is_child_negative_threshold",
+  "tests/test_data_transforms.py::test_impute_missing_embarked_with_autofill",
+  "tests/test_data_transforms.py::test_impute_missing_embarked",
+  "tests/test_data_transforms.py::test_impute_missing_embarked_with_none_missing",
+  "tests/test_data_transforms.py::test_impute_missing_embarked_with_incorrect_embarked",
+  "tests/test_data_transforms.py::test_refactor_transformed_data",
+  "tests/test_data_transforms.py::test_estimate_by_group",
+  "tests/test_data_transforms.py::test_estimate_by_group_age_sex",
+  "tests/test_data_transforms.py::test_estimate_by_group_age",
+  "tests/test_data_transforms.py::test_impute_missing_metric"
 ]
