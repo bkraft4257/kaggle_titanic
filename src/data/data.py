@@ -4,6 +4,7 @@ from typing import Union
 from pathlib import Path
 from nameparser import HumanName
 from sklearn.preprocessing import scale
+from typing import Optional
 
 from IPython.display import display
 from collections import Counter
@@ -96,12 +97,12 @@ class TransformData:
         age_bins=None,
         age_bin_label=None,
         embarked_mode=None,
-        Xy_age_estimate=None,
-        Xy_fare_estimate=None,
+        xy_age_estimate=None,
+        xy_fare_estimate=None,
         drop_columns=None,
         translate_title_dictionary=None,
         fare_bins=None,
-        fare_bin_labels=["q1", "q2", "q3", "q4"],
+        fare_bin_labels=None,
     ):
         """Transform Data according to the rules established in the EDA. To apply
         the same rules to another data set you must explicitly pass in
@@ -109,7 +110,7 @@ class TransformData:
         * adult_age_threshold_min
         * age_bins
         * embarked_mode
-        * Xy_age_estimate
+        * xy_age_estimate
 
         Arguments:
              filename [str|Path] -- Filename of CSV data file containing data.
@@ -134,11 +135,14 @@ class TransformData:
                 "senior",
             ]
 
+        if fare_bin_labels is None:
+            fare_bin_labels = ["q1", "q2", "q3", "q4"]
+
         assert len(age_bins) == len(age_bin_label) + 1
 
         self.translate_title_dictionary = translate_title_dictionary
-        self.Xy_age_estimate = Xy_age_estimate
-        self.Xy_fare_estimate = Xy_fare_estimate
+        self.Xy_age_estimate = xy_age_estimate
+        self.Xy_fare_estimate = xy_fare_estimate
 
         self.raw = raw_data
         self.adult_age_threshold_min = adult_age_threshold_min
@@ -156,12 +160,13 @@ class TransformData:
 
         self.embarked_mode = embarked_mode
 
+        # Methods
+
         self.impute_missing_embarked()
 
+        self.Xy = extract_title(self.Xy, self.translate_title_dictionary)
         self.extract_title()
         self.extract_last_name()
-        self.extract_cabin_number()
-        self.extract_cabin_prefix()
         self.calc_family_size()
 
         self.reset_fare_equals_0_nan()
@@ -179,10 +184,18 @@ class TransformData:
         self.Xy = self.Xy.sort_index()
 
     def calc_family_size(self):
-        """Create feature family size, which is the number of people (including
-        self) that are traveling together.
         """
-        # self.Xy = calc_family_size(Xy)
+        Create feature family size, which is the number of people (including
+        self) that are traveling together.
+
+        Arguments:
+            in_df: Dataframe containing columns sibsp and parch
+
+        Returns:
+            Dataframe with the new column family_size, where family size
+            is sibsp + parch + 1
+        """
+
         self.Xy["family_size"] = self.Xy.sibsp + self.Xy.parch + 1
 
     def calc_is_traveling_alone(self):
@@ -194,17 +207,6 @@ class TransformData:
         """Calculate Boolean feature if passenger is a child as determined by the self.adult_age_threshold_min
         """
         self.Xy["is_child"] = self.Xy.age < self.adult_age_threshold_min
-
-    def extract_cabin_number(self):
-        """
-        Extracts cabin number from ticket.
-        """
-        self.Xy["cabin_number"] = self.Xy.ticket.str.extract(r"(\d+)$")
-
-    def extract_cabin_prefix(self):
-        """Extracts cabin prefix from ticket.
-        """
-        self.Xy["cabin_prefix"] = self.Xy.ticket.str.extract(r"^(.+) ")
 
     def extract_title(self):
         """Extract title from the name using nameparser.
@@ -226,7 +228,12 @@ class TransformData:
         self.Xy["title"] = title
 
     def extract_last_name(self):
-        "Extracts last name from name feature using nameparser."
+        """
+        Extracts last name from name feature using nameparser.
+
+        Returns:
+
+        """
         self.Xy["last_name"] = self.Xy.name.apply(lambda x: HumanName(x).last)
 
     def calc_age_bins(self):
@@ -365,19 +372,26 @@ TRANSLATE_TITLE_DICTIONARY = {
 }
 
 
-def extract_title(in_df, translate_title_dictionary=TRANSLATE_TITLE_DICTIONARY):
-    """Extract title from the name using nameparser.
+def extract_title(in_df: pd.DataFrame, translate_title_dictionary=None) -> pd.DataFrame:
+    """
+    Extract title from the name using nameparser.
     If the Title is empty then we will fill the title with either Mr or Mrs depending upon the sex.  This
     is adequate for the train and holdout data sets.  The title being empty only occurs for passenger 1306
-    in the holdout data set.  A more appropriate way to do this is to check on the sex and age to correctly
-    assign the title.
+    in the holdout data set.
 
-    Arguments:
-        in_df: Dataframe containing columns name and sex
+    Args:
+        in_df:
+        translate_title_dictionary:
 
-    Return:
+    Returns:
 
     """
+
+    assert "name" in in_df.columns
+    assert "sex" in in_df.columns
+
+    if translate_title_dictionary is None:
+        translate_title_dictionary = TRANSLATE_TITLE_DICTIONARY
 
     out_df = in_df.copy()
 
@@ -395,7 +409,7 @@ def extract_title(in_df, translate_title_dictionary=TRANSLATE_TITLE_DICTIONARY):
     return out_df
 
 
-def calc_family_size(in_df: pd.DataFrame):  # -> pd.DataFrame:
+def calc_family_size(in_df: pd.DataFrame) -> pd.Series:
     """
     Create feature family size, which is the number of people (including
     self) that are traveling together.
@@ -407,14 +421,11 @@ def calc_family_size(in_df: pd.DataFrame):  # -> pd.DataFrame:
         Dataframe with the new column family_size, where family size
         is sibsp + parch + 1
     """
-    out_df = in_df.copy()
 
-    out_df["family_size"] = out_df.sibsp + out_df.parch + 1
-
-    return out_df
+    return pd.Series(in_df.sibsp + in_df.parch + 1, name="family_size")
 
 
-def extract_last_name(in_series: pd.Series):  # ->  pd.Series:
+def extract_last_name(in_series: pd.Series) -> pd.Series:
     """ Extracts last name from name featureusing nameparser from a series.
 
     Arguments:
@@ -428,7 +439,41 @@ def extract_last_name(in_series: pd.Series):  # ->  pd.Series:
     out_series = in_series.apply(lambda x: HumanName(x).last)
     out_series.name = "last_name"
 
+    assert out_series.name == "last_name"
+
     return out_series
+
+
+def calc_is_child(in_series: pd.Series, adult_age_threshold_min: int = 13) -> pd.Series:
+    """Calculate Boolean feature if passenger is a child as determined by the self.adult_age_threshold_min
+    """
+    assert in_series.name == "age"
+    assert adult_age_threshold_min >= 0
+
+    return pd.Series(in_series < adult_age_threshold_min)
+
+
+def impute_missing_embarked(
+    in_series: pd.Series, assume_embarked_from: Optional[str] = None
+) -> pd.Series:
+    """
+    Imputes missing embarkment location based upon the most frequent
+    place to embark.
+
+    Args:
+        in_series:
+        assume_embarked_from: C=Cherbourg, Q=Queenstown, S=Southampton
+
+    Returns:
+
+    """
+
+    if assume_embarked_from is None:
+        assume_embarked_from = in_series.mode()[0]
+
+    assert assume_embarked_from in ["C", "Q", "S"]
+
+    return in_series.fillna(assume_embarked_from)
 
 
 def transform_X_numerical(Xy, columns=["age", "fare", "family_size"]):
