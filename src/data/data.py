@@ -6,11 +6,6 @@ from nameparser import HumanName
 from sklearn.preprocessing import scale
 from typing import Optional
 
-from IPython.display import display
-from collections import Counter
-
-import great_expectations as ge
-
 
 class ExtractData:
     """Extract Titanic data from the Kaggle's train.csv file.
