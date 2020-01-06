@@ -1,5 +1,0 @@
-Doc strings
-===========
-
-.. automodule:: src.data.data
-   :members: Extrac

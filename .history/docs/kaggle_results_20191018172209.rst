@@ -1,7 +1,0 @@
-Kaggle Results
-==============
-
-
-I was shocked the first time I looked at the Kaggle Titanic Public 
-Leader Board. On October 18, 2019 there were 71 entries with a perfect accuracy score. 
-My first submission I received a 0.77511.

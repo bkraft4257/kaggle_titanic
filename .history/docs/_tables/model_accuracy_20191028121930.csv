@@ -1,4 +1,0 @@
-date, model, accuracy, recall, precision, f1, holdout_accuracy
-10/28/19, dummy_most_frequent, 0.6223, 0, 0, 0, NS
-10/28/19, logreg_gender_only, 0.7958, 0.6959, 0.7455, 0.7189, 0.76555
-10/28/19, logreg model_1, 0.8286, 0.7238,0.8013,0.7602, NS

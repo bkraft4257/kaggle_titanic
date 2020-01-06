@@ -1,3 +1,0 @@
-date, model, accuracy, recall, precision, f1, holdout_accuracy
-10/10/19, gender_model,.7,.7,.7,.7,, My first model
-10/21/19, logreg, ,,,,, Logreg model with feature selection

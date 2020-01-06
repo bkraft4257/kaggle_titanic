@@ -1,7 +1,0 @@
-Data ReadMe.rst
-===============
-
-Data can be downloaded from <https://www.kaggle.com/c/titanic/data>_
-
-This data set contains two CSV files: train.csv and test.csv.  When
-we train our model we will split the data into two groups

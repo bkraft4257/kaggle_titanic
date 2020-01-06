@@ -1,5 +1,0 @@
-Kaggle Results
-==============
-
-
-I was shocked the first time I looked at the Kaggle Titanic Public Leader Board. On Oc
