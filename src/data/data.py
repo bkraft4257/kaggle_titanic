@@ -47,15 +47,65 @@ class ExtractData:
         Returns:
             pd.DataFrame -- [description]
         """
-        Xy_raw = pd.read_csv(self.filename)
+        xy_raw = pd.read_csv(self.filename)
 
-        Xy_raw.columns = Xy_raw.columns.str.lower().str.replace(" ", "_")
+        xy_raw.columns = xy_raw.columns.str.lower().str.replace(" ", "_")
 
-        Xy_raw = Xy_raw.rename(columns={"age": "age_raw"})
-        Xy_raw = Xy_raw.rename(columns={"fare": "fare_raw"})
+        xy_raw = xy_raw.rename(columns={"age": "age_raw"})
+        xy_raw = xy_raw.rename(columns={"fare": "fare_raw"})
 
-        Xy_raw["pclass"] = Xy_raw["pclass"].astype("category")
-        self.Xy_raw = Xy_raw.set_index("passengerid")
+        xy_raw["pclass"] = xy_raw["pclass"].astype("category")
+        self.Xy_raw = xy_raw.set_index("passengerid")
+
+
+class TransformBin:
+    """
+
+    """
+
+    def __init__(self, data, column, bins=None, bin_qcut=None, bin_labels=None):
+
+        self.Xy = data
+        self.column = column
+
+        if (bin_labels is None) & (bins is None):
+            bin_labels = ["q1", "q2", "q3", "q4"]
+
+        self.bin_labels = bin_labels
+
+        if (bin_qcut is None) & (bins is None):
+            bin_qcut = [0, 0.25, 0.5, 0.75, 1.0]
+
+        self.bin_qcut = bin_qcut
+
+        if ~(self.bin_qcut is None) & ~(self.bin_labels is None):
+            assert len(self.bin_qcut) == len(self.bin_labels) + 1
+
+        if bins is None:
+            _, bins = pd.qcut(
+                self.Xy[column], q=self.bin_qcut, labels=self.bin_labels, retbins=True
+            )
+
+        self.bins = bins
+
+        if ~(self.bins is None) & ~(self.bin_labels is None):
+            assert len(self.bins) == len(self.bin_labels) + 1
+
+    def transform(self):
+
+        if self.bin_labels is not None:
+            self.Xy[self.column + "_bin"] = pd.cut(
+                self.Xy[self.column],
+                bins=self.bins,
+                labels=self.bin_labels,
+                include_lowest=True,
+            )
+        else:
+            self.Xy[self.column + "_bin"] = pd.cut(
+                self.Xy[self.column], bins=self.bins, include_lowest=True
+            )
+
+        return self.Xy
 
 
 class TransformData:
@@ -97,6 +147,7 @@ class TransformData:
         drop_columns=None,
         translate_title_dictionary=None,
         fare_bins=None,
+        fare_bins_qcut=None,
         fare_bin_labels=None,
     ):
         """Transform Data according to the rules established in the EDA. To apply
@@ -133,6 +184,9 @@ class TransformData:
         if fare_bin_labels is None:
             fare_bin_labels = ["q1", "q2", "q3", "q4"]
 
+        if fare_bins_qcut is None:
+            fare_bins_qcut = [0, 0.25, 0.5, 0.75, 1.0]
+
         assert len(age_bins) == len(age_bin_label) + 1
 
         self.translate_title_dictionary = translate_title_dictionary
@@ -150,6 +204,7 @@ class TransformData:
         self.Xy_fare_estimate = xy_fare_estimate
 
         self.fare_bins = fare_bins
+        self.fare_bins_qcut = fare_bins_qcut
         self.fare_bin_labels = fare_bin_labels
 
         if embarked_mode is None:
@@ -168,8 +223,6 @@ class TransformData:
         )
         self.Xy["last_name"] = extract_last_name(self.Xy.name)
         self.Xy["family_size"] = calc_family_size(self.Xy[["sibsp", "parch"]])
-
-        self.reset_fare_equals_0_nan()
 
         if self.Xy_fare_estimate is None:
             self.Xy_fare_estimate = estimate_by_group(
@@ -213,7 +266,7 @@ class TransformData:
         if self.fare_bins is None:
             self.Xy["fare_bin"] = pd.qcut(
                 self.Xy.fare.fillna(-1),
-                q=[0, 0.25, 0.5, 0.75, 1.0],
+                q=self.fare_bins_qcut,
                 labels=self.fare_bin_labels,
             )
 
@@ -227,12 +280,6 @@ class TransformData:
             )
 
         assert (len(self.fare_bins) - 1) == len(self.fare_bin_labels)
-
-    def reset_fare_equals_0_nan(self):
-        """
-
-        """
-        self.Xy["fare_raw"] = self.Xy["fare_raw"].replace(0, np.nan)
 
     def estimate_fare(self, groupby_columns="pclass"):
         """Estimate fare for passengers that travelled for free (fare = 0).
@@ -271,42 +318,21 @@ class TransformData:
             )
 
     def impute_missing_age(self):
+        """Imputes missing age by group.
+        """
 
-        groupby_columns = list(self.Xy_age_estimate.index.names)
-
-        out_df = (
-            self.Xy.reset_index()
-            .merge(
-                self.Xy_age_estimate.reset_index(),
-                on=groupby_columns,
-                how="left",
-                indicator=False,
-            )
-            .set_index("passengerid")
+        self.Xy = impute_missing_metric_by_group(
+            self.Xy, self.Xy_age_estimate, "age_raw", "age_estimate", "age"
         )
-
-        out_df["age"] = out_df["age_raw"].fillna(out_df["age_estimate"])
-
-        self.Xy = out_df
+        self.Xy["age"] = self.Xy["age"].round(2)
 
     def impute_missing_fare(self):
-        """Imputes missing fare based upon only the most frequent fare. This
-        could be improved by looking at additional features. In particular,
-        the number of passengers in the party and pclass.
+        """Imputes missing fare by group.
         """
-        groupby_columns = list(self.Xy_fare_estimate.index.names)
-
-        out_df = (
-            self.Xy.reset_index()
-            .merge(
-                self.Xy_fare_estimate, on=groupby_columns, how="left", indicator=False
-            )
-            .set_index("passengerid")
+        self.Xy = impute_missing_metric_by_group(
+            self.Xy, self.Xy_fare_estimate, "fare_raw", "fare_estimate", "fare"
         )
-
-        out_df["fare"] = out_df["fare_raw"].fillna(out_df["fare_estimate"])
-
-        self.Xy = out_df
+        self.Xy["fare"] = self.Xy["fare"].round(4)
 
     # =============================================================================
 
@@ -490,20 +516,44 @@ def estimate_by_group(
     return out_df
 
 
-def impute_missing_metric(
-    in_series,
-    in_estimate,
-    column_name_of_metric_with_na,
-    column_name_of_estimated_metric,
-    column_name_of_final_metric,
+def impute_missing_metric_by_group(
+    in_df: pd.DataFrame,
+    in_fillna_by_group: pd.DataFrame,
+    column_name_of_metric_with_na: str,
+    column_name_of_estimated_metric: str,
+    column_name_of_final_metric: str,
 ):
+    """
+    Fills in a missing metric according to the estimate dataframe.
 
-    groupby_columns = list(in_estimate.index.names)
-    index_names = list(in_series.index.names)
+    Pandas fillna() function allows one to fill in missing value with a
+    a fixed value.  This is very useful for replacing all missing values
+    with a single value.  impute_missing_metric_by_group extends this
+    capability by filling in missing values according by specified groups.
+
+    This is accomplished by merging the in_df with the in_fillna_by_group
+    and renaming a new column.
+
+    Args:
+        in_df:
+        in_fillna_by_group:
+        column_name_of_metric_with_na:
+        column_name_of_estimated_metric:
+        column_name_of_final_metric:
+
+    Returns:
+
+    """
+
+    groupby_columns = list(in_fillna_by_group.index.names)
+    index_names = list(in_df.index.names)
 
     out_df = (
-        in_series.reset_index().merge(
-            in_estimate.reset_index(), on=groupby_columns, how="left", indicator=False
+        in_df.reset_index().merge(
+            in_fillna_by_group.reset_index(),
+            on=groupby_columns,
+            how="left",
+            indicator=False,
         )
     ).set_index(index_names)
 
@@ -511,7 +561,7 @@ def impute_missing_metric(
         out_df[column_name_of_estimated_metric]
     )
 
-    return out_df[column_name_of_final_metric]
+    return out_df
 
 
 def transform_X_numerical(Xy, columns=["age", "fare", "family_size"]):

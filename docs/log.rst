@@ -398,5 +398,9 @@ Created src/models/run.py so saved models can be run from the command line.  For
     >> ../../src/models/run.py ../../models/xgb.joblib X_test__xgb.csv -y y_test__xgb.csv -v -o kaggle_test_xgb_model.csv
     >> ../../src/models/run.py ../../models/logreg.joblib X_test__logres.csv -y y_test__logres.csv -v -o kaggle_test_logres_model.csv
 
-Updated documentation to include this new information.  
+Updated documentation to include this new information.
 
+Jan 6, 2020 at 10:24:39 AM
+--------------------------
+
+It is a new year and vacation is over. It is time to become serious about this project.

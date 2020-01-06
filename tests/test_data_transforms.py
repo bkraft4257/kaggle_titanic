@@ -1,4 +1,4 @@
-from src.data.data import ExtractData, TransformData
+from src.data.data import ExtractData, TransformData, TransformBin
 
 import pandas as pd
 import numpy as np
@@ -10,7 +10,7 @@ from src.data.data import (
     calc_is_child,
     impute_missing_embarked,
     estimate_by_group,
-    impute_missing_metric,
+    impute_missing_metric_by_group,
 )
 
 test_data_1 = [
@@ -175,18 +175,20 @@ def test_impute_missing_metric():
     in_df = pd.DataFrame(
         data={
             "age": [10, 10, 20, 20, 20, 30, 30],
-            "metric_raw": [10, 20, 30, 40, 50, 50, np.nan],
+            "metric_raw": [10.0, 20.0, 30.0, 40.0, 50.0, 50.0, np.nan],
         }
     ).set_index("age")
 
     metric_estimate = pd.DataFrame(
-        data={"metric_estimate": [15, 40, 50], "age": [10, 20, 30]}
+        data={"metric_estimate": [15.0, 40.0, 50.0], "age": [10, 20, 30]}
     ).set_index("age")
 
     expected_df = (
         pd.DataFrame(
             data={
                 "age": [10, 10, 20, 20, 20, 30, 30],
+                "metric_raw": [10.0, 20.0, 30.0, 40.0, 50.0, 50.0, np.nan],
+                "metric_estimate": [15.0, 15.0, 40.0, 40.0, 40.0, 50.0, 50.0],
                 "metric": [10.0, 20.0, 30.0, 40.0, 50.0, 50.0, 50.0],
             }
         )
@@ -194,16 +196,79 @@ def test_impute_missing_metric():
         .squeeze()
     )
 
-    out_df = impute_missing_metric(
+    out_df = impute_missing_metric_by_group(
         in_df, metric_estimate, "metric_raw", "metric_estimate", "metric"
     )
 
     assert expected_df.equals(out_df)
 
 
+def test_transform_bin_metric_raw():
+
+    vector = list(range(0, 101, 10))
+
+    in_df = pd.DataFrame(data={"age": vector, "metric_raw": vector}).set_index("age")
+
+    expected_df = pd.DataFrame(
+        data={
+            "age": vector,
+            "metric_raw": vector,
+            "metric_raw_bin": ["q1"] * 3 + ["q2"] * 3 + ["q3"] * 2 + ["q4"] * 3,
+        }
+    ).set_index("age")
+
+    expected_category = pd.CategoricalDtype(
+        categories=["q1", "q2", "q3", "q4"], ordered=True
+    )
+    expected_df.metric_raw_bin = expected_df.metric_raw_bin.astype(expected_category)
+
+    tb = TransformBin(in_df, "metric_raw")
+
+    out_df = tb.transform()
+
+    assert (tb.bins == [0, 25, 50, 75, 100]).all()
+    assert tb.bin_qcut == [0, 0.25, 0.5, 0.75, 1.0]
+    assert tb.bin_labels == ["q1", "q2", "q3", "q4"]
+
+    assert type(out_df) == pd.DataFrame
+    assert type(expected_df) == pd.DataFrame
+    assert expected_df.equals(out_df)
+
+
+def test_transform_bin_age():
+
+    vector = list(range(0, 101, 10))
+
+    in_df = pd.DataFrame(data={"age": vector, "metric_raw": vector})
+
+    expected_df = pd.DataFrame(
+        data={
+            "age": vector,
+            "metric_raw": vector,
+            "age_bin": ["q1"] * 3 + ["q2"] * 3 + ["q3"] * 2 + ["q4"] * 3,
+        }
+    )
+
+    expected_category = pd.CategoricalDtype(
+        categories=["q1", "q2", "q3", "q4"], ordered=True
+    )
+    expected_df.age_bin = expected_df.age_bin.astype(expected_category)
+
+    tb = TransformBin(in_df, "age")
+
+    out_df = tb.transform()
+
+    assert (tb.bins == [0, 25, 50, 75, 100]).all()
+    assert tb.bin_qcut == [0, 0.25, 0.5, 0.75, 1.0]
+    assert tb.bin_labels == ["q1", "q2", "q3", "q4"]
+
+    assert type(out_df) == pd.DataFrame
+    assert type(expected_df) == pd.DataFrame
+    assert expected_df.equals(out_df)
+
+
 # =========================================
 # Tests for Refactoring TransformData class
-
 
 translate_title_dictionary = {
     "Mlle": "Miss",
@@ -224,10 +289,11 @@ age_bin_label = ["baby", "child", "teen", "student", "young_adult", "adult", "se
 assert len(age_bins) == len(age_bin_label) + 1
 
 
-def read_csv_expected_data(
-    filename="../tests/data/expected_transformed_kaggle_train.csv"
-):
+def read_csv_expected_data():
+    filename = "../tests/data/expected_transformed_kaggle_train.csv"
+
     test_train_transformed = pd.read_csv(filename, index_col="passengerid")
+
     test_train_transformed.pclass = test_train_transformed.pclass.astype("category")
 
     fare_bin_cat_type = pd.CategoricalDtype(
@@ -258,6 +324,7 @@ def read_csv_expected_data(
 
 def test_refactor_transformed_data():
     train = ExtractData("../data/raw/kaggle_train.csv")
+    train.Xy_raw["fare_raw"] = train.Xy_raw["fare_raw"].replace(0, np.nan)
 
     transformed_train = TransformData(
         train,
@@ -270,35 +337,4 @@ def test_refactor_transformed_data():
     transformed_train.transform()
     expected_train = read_csv_expected_data()
 
-    columns = [
-        "survived",
-        "pclass",
-        "name",
-        "sex",
-        "age_raw",
-        "sibsp",
-        "parch",
-        "ticket",
-        "fare_raw",
-        "cabin",
-        "embarked",
-        "title",
-        "last_name",
-        "family_size",
-        "fare_estimate",
-        "fare",
-        "fare_bin",
-        "is_child",
-        "is_traveling_alone",
-        "age_estimate",
-    ]
-
-    columns = ["age"]
-
-    tmp = pd.concat([transformed_train.Xy[columns], expected_train[columns]], axis=1)
-    tmp.columns = ["transformed_age", "expected_age"]
-
-    print(tmp)
-
-    print(expected_train.columns)
     assert expected_train.equals(transformed_train.Xy)
